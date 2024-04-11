@@ -1,20 +1,26 @@
 import type { TValidationErrorsDTO } from "./errors.interface";
 
-export interface ICreateUserDTO {
+export interface IRegisterUserDTO {
   email: string;
   password: string;
   firstname: string;
   lastname: string;
 }
 
-export interface ICreateUserResponseDTO {
+export interface IRegisterUserResponseDTO {
   code: number;
   message: string;
-  errors?: TValidationErrorsDTO<IUser>;
+  token?: string;
+  errors?: TValidationErrorsDTO<IUserModel>;
 }
 
-export interface IUser {
+export interface IUserModel {
   email: string;
   password: string;
   username: string;
+}
+
+export interface IUserTokenData {
+  email: string;
+  role: string;
 }

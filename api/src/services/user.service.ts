@@ -1,30 +1,27 @@
 import type { TValidationErrorsDTO } from "../interfaces/errors.interface";
 import type {
-  IUser,
-  ICreateUserDTO,
-  ICreateUserResponseDTO,
+  IUserModel,
+  IRegisterUserDTO,
+  IRegisterUserResponseDTO,
 } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import mangoose from "mongoose";
+import AuthService from "./auth.service";
 
 class UserService {
-  public async createUser(
-    data: ICreateUserDTO
-  ): Promise<ICreateUserResponseDTO> {
+  public async registerUser(
+    data: IRegisterUserDTO
+  ): Promise<IRegisterUserResponseDTO> {
     try {
-      const user: IUser = {
-        email: data.email,
-        password: data.password,
-        username: `${data.firstname} ${data.lastname}`,
-      };
-      const userModel = new UserModel(user);
+      const userModel = await this.createUser(data);
 
-      await userModel.save();
-      // TODO: Create User Token
+      const { email, role } = userModel.toObject();
+      const token = AuthService.generateAccessToken({ email, role });
 
       return {
         code: 201,
         message: "User created",
+        token,
       };
     } catch (error) {
       if (error instanceof mangoose.Error.ValidationError) {
@@ -40,12 +37,22 @@ class UserService {
     }
   }
 
+  private async createUser(data: IRegisterUserDTO) {
+    const user: IUserModel = {
+      email: data.email,
+      password: data.password,
+      username: `${data.firstname} ${data.lastname}`,
+    };
+    const userModel = new UserModel(user);
+    return await userModel.save();
+  }
+
   private handleValidationErrors(
     error: mangoose.Error.ValidationError
-  ): ICreateUserResponseDTO {
-    const errors: TValidationErrorsDTO<IUser> = {};
+  ): IRegisterUserResponseDTO {
+    const errors: TValidationErrorsDTO<IUserModel> = {};
     for (const err in error.errors) {
-      errors[err as keyof IUser] = error.errors[err].message;
+      errors[err as keyof IUserModel] = error.errors[err].message;
     }
 
     return {

@@ -1,15 +1,15 @@
 import type {
-  ICreateUserDTO,
-  ICreateUserResponseDTO,
+  IRegisterUserDTO,
+  IRegisterUserResponseDTO,
 } from "../interfaces/user.interface";
 import UserService from "../services/user.service";
 
 class UserController {
-  public static async createUser(
-    user: ICreateUserDTO
-  ): Promise<ICreateUserResponseDTO> {
+  public static async registerUser(
+    user: IRegisterUserDTO
+  ): Promise<IRegisterUserResponseDTO> {
     const userService = new UserService();
-    const response = await userService.createUser(user);
+    const response = await userService.registerUser(user);
 
     return response;
   }
