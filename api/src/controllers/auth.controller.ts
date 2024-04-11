@@ -2,17 +2,16 @@ import type {
   IRegisterUserDTO,
   IRegisterUserResponseDTO,
 } from "../interfaces/user.interface";
-import UserService from "../services/user.service";
+import AuthService from "../services/auth.service";
 
-class UserController {
+class AuthController {
   public static async registerUser(
     user: IRegisterUserDTO
   ): Promise<IRegisterUserResponseDTO> {
-    const userService = new UserService();
-    const response = await userService.registerUser(user);
+    const response = await AuthService.registerUser(user);
 
     return response;
   }
 }
 
-export default UserController;
+export default AuthController;

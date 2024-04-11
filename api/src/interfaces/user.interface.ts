@@ -10,11 +10,16 @@ export interface IRegisterUserDTO {
 export interface IRegisterUserResponseDTO {
   code: number;
   message: string;
+  data?: {
+    email: string;
+    username: string;
+    role: "user" | "admin";
+  };
   token?: string;
-  errors?: TValidationErrorsDTO<IUserModel>;
+  errors?: TValidationErrorsDTO<ICreateUserModel>;
 }
 
-export interface IUserModel {
+export interface ICreateUserModel {
   email: string;
   password: string;
   username: string;
@@ -22,5 +27,5 @@ export interface IUserModel {
 
 export interface IUserTokenData {
   email: string;
-  role: string;
+  role: "user" | "admin";
 }
