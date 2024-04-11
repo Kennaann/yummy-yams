@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import PastriesController from "../controllers/pastries.controller";
+import { IGetAllPastriesResponseDTO } from "../interfaces/pastries.interface";
 
 const router = Router();
 
