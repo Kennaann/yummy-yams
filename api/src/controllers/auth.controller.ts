@@ -1,16 +1,21 @@
 import type {
   IRegisterUserDTO,
-  IRegisterUserResponseDTO,
+  IAuthUserResponseDTO,
+  ILoginUserDTO,
 } from "../interfaces/user.interface";
 import AuthService from "../services/auth.service";
 
 class AuthController {
   public static async registerUser(
     user: IRegisterUserDTO
-  ): Promise<IRegisterUserResponseDTO> {
-    const response = await AuthService.registerUser(user);
+  ): Promise<IAuthUserResponseDTO<IRegisterUserDTO>> {
+    return await AuthService.registerUser(user);
+  }
 
-    return response;
+  public static async loginUser(
+    user: ILoginUserDTO
+  ): Promise<IAuthUserResponseDTO<ILoginUserDTO>> {
+    return await AuthService.loginUser(user);
   }
 }
 

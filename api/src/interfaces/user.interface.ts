@@ -7,7 +7,7 @@ export interface IRegisterUserDTO {
   lastname: string;
 }
 
-export interface IRegisterUserResponseDTO {
+export interface IAuthUserResponseDTO<T> {
   code: number;
   message: string;
   data?: {
@@ -16,7 +16,7 @@ export interface IRegisterUserResponseDTO {
     role: "user" | "admin";
   };
   token?: string;
-  errors?: TValidationErrorsDTO<ICreateUserModel>;
+  errors?: TValidationErrorsDTO<T>;
 }
 
 export interface ICreateUserModel {
@@ -28,4 +28,9 @@ export interface ICreateUserModel {
 export interface IUserTokenData {
   email: string;
   role: "user" | "admin";
+}
+
+export interface ILoginUserDTO {
+  email: string;
+  password: string;
 }

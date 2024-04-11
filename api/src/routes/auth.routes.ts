@@ -13,4 +13,10 @@ router.post(
   }
 );
 
+router.post("/login", async (req: Request, res: Response) => {
+  const { code, ...response } = await AuthController.loginUser(req.body);
+
+  res.status(code).send(response);
+});
+
 export default router;

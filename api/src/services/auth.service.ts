@@ -1,16 +1,18 @@
 import type {
   IRegisterUserDTO,
-  IRegisterUserResponseDTO,
+  IAuthUserResponseDTO,
   IUserTokenData,
+  ILoginUserDTO,
 } from "../interfaces/user.interface";
 import jwt from "jsonwebtoken";
 import ConfigService from "./config.service";
 import UserService from "./user.service";
 import mangoose from "mongoose";
+
 class AuthService {
   public static async registerUser(
     data: IRegisterUserDTO
-  ): Promise<IRegisterUserResponseDTO> {
+  ): Promise<IAuthUserResponseDTO<IRegisterUserDTO>> {
     try {
       const userModel = await UserService.createUser(data);
 
@@ -34,6 +36,50 @@ class AuthService {
 
       console.error("UserService.creataUser : ", error);
 
+      return {
+        code: 500,
+        message: "Internal server error",
+      };
+    }
+  }
+
+  public static async loginUser(
+    data: ILoginUserDTO
+  ): Promise<IAuthUserResponseDTO<ILoginUserDTO>> {
+    try {
+      const user = await UserService.findUserByEmail(data.email);
+      if (!user) {
+        return {
+          code: 404,
+          message: "User not found",
+        };
+      }
+
+      const isValidPassword = await user.isValidPassword(data.password);
+      if (!isValidPassword) {
+        return {
+          code: 400,
+          message: "Invalid password",
+        };
+      }
+
+      const token = this.generateAccessToken({
+        email: user.email,
+        role: user.role,
+      });
+
+      return {
+        code: 200,
+        message: "Login successful",
+        data: {
+          email: user.email,
+          username: user.username,
+          role: user.role,
+        },
+        token,
+      };
+    } catch (error) {
+      console.error("AuthService.loginUser : ", error);
       return {
         code: 500,
         message: "Internal server error",

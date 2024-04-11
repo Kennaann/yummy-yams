@@ -1,11 +1,27 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Model, Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&-_])[A-Za-z\d@$!%*#?&-_]{8,}$/;
 
-const UserSchema = new Schema({
+interface IUser {
+  username: string;
+  email: string;
+  password: string;
+  role: "user" | "admin";
+  createdAt: Date;
+  updatedAt: Date;
+  attempts: number;
+  methods: IUserMethods;
+}
+interface IUserMethods {
+  isValidPassword(password: string): Promise<boolean>;
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>;
+
+const UserSchema = new Schema<IUser, UserModel, IUserMethods>({
   username: {
     type: String,
     required: true,
@@ -56,6 +72,12 @@ UserSchema.pre("save", async function (next) {
   }
   next();
 });
+
+UserSchema.methods.isValidPassword = async function isValidPassword(
+  password: string
+) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const UserModel = model("User", UserSchema);
 

@@ -2,7 +2,7 @@ import type { TValidationErrorsDTO } from "../interfaces/errors.interface";
 import type {
   ICreateUserModel,
   IRegisterUserDTO,
-  IRegisterUserResponseDTO,
+  IAuthUserResponseDTO,
 } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import mangoose from "mongoose";
@@ -18,9 +18,13 @@ class UserService {
     return await userModel.save();
   }
 
+  public static async findUserByEmail(email: string) {
+    return await UserModel.findOne({ email: email }).exec();
+  }
+
   public static handleValidationErrors(
     error: mangoose.Error.ValidationError
-  ): IRegisterUserResponseDTO {
+  ): IAuthUserResponseDTO<IRegisterUserDTO> {
     const errors: TValidationErrorsDTO<ICreateUserModel> = {};
     for (const err in error.errors) {
       errors[err as keyof ICreateUserModel] = error.errors[err].message;
