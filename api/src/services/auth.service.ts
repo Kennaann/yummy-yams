@@ -90,7 +90,7 @@ class AuthService {
   private static generateAccessToken(data: IUserTokenData): string {
     try {
       const secret = ConfigService.get("TOKEN_SECRET");
-      return jwt.sign(data, secret, { expiresIn: "2d" });
+      return jwt.sign(data, secret, { expiresIn: "1h" });
     } catch (error) {
       console.error("AuthService.generateAccessToken : ", error);
       throw new Error("Error generating access token");
