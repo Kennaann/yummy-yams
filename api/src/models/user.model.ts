@@ -5,7 +5,7 @@ const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&-_])[A-Za-z\d@$!%*#?&-_]{8,}$/;
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -45,23 +45,18 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
-  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
-  return !!user;
-};
+UserSchema.path("email").validate(async function (value, _done) {
+  const emailCount = await UserModel.countDocuments({ email: value });
+  return !emailCount;
+}, "Email already exists");
 
-userSchema.methods.isPasswordMatch = async function (password: string) {
-  const user = this;
-  return bcrypt.compare(password, user.password);
-};
-
-userSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 8);
   }
   next();
 });
 
-const UserModel = model("User", userSchema);
+const UserModel = model("User", UserSchema);
 
 export default UserModel;
