@@ -1,9 +1,9 @@
-import type { TValidationErrorsDTO } from "../interfaces/errors.interface";
-import type {
-  ICreateUserModel,
-  IRegisterUserDTO,
+import {
   IAuthUserResponseDTO,
-} from "../interfaces/user.interface";
+  IRegisterUserDTO,
+} from "../interfaces/auth.interface";
+import type { TValidationErrorsDTO } from "../interfaces/errors.interface";
+import type { ICreateUserModel } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import mangoose from "mongoose";
 

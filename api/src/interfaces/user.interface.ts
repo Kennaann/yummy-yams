@@ -1,23 +1,23 @@
-import type { TValidationErrorsDTO } from "./errors.interface";
+import { Model } from "mongoose";
 
-export interface IRegisterUserDTO {
+export interface IUser {
+  username: string;
   email: string;
   password: string;
-  firstname: string;
-  lastname: string;
+  role: TUserRoles;
+  createdAt: Date;
+  updatedAt: Date;
+  attempts: number;
+  methods: IUserMethods;
 }
 
-export interface IAuthUserResponseDTO<T> {
-  code: number;
-  message: string;
-  data?: {
-    email: string;
-    username: string;
-    role: "user" | "admin";
-  };
-  token?: string;
-  errors?: TValidationErrorsDTO<T>;
+export type TUserRoles = "user" | "admin";
+
+export interface IUserMethods {
+  isValidPassword(password: string): Promise<boolean>;
 }
+
+export type TUserModel = Model<IUser, {}, IUserMethods>;
 
 export interface ICreateUserModel {
   email: string;
@@ -27,10 +27,5 @@ export interface ICreateUserModel {
 
 export interface IUserTokenData {
   email: string;
-  role: "user" | "admin";
-}
-
-export interface ILoginUserDTO {
-  email: string;
-  password: string;
+  role: TUserRoles;
 }

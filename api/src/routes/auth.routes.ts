@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import type { IRegisterUserDTO } from "../interfaces/user.interface";
 import AuthController from "../controllers/auth.controller";
+import type { IRegisterUserDTO } from "../interfaces/auth.interface";
 
 const router = Router();
 

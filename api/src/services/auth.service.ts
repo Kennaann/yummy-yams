@@ -1,13 +1,13 @@
-import type {
-  IRegisterUserDTO,
-  IAuthUserResponseDTO,
-  IUserTokenData,
-  ILoginUserDTO,
-} from "../interfaces/user.interface";
+import type { IUserTokenData } from "../interfaces/user.interface";
 import jwt from "jsonwebtoken";
 import ConfigService from "./config.service";
 import UserService from "./user.service";
 import mangoose from "mongoose";
+import type {
+  IAuthUserResponseDTO,
+  ILoginUserDTO,
+  IRegisterUserDTO,
+} from "../interfaces/auth.interface";
 
 class AuthService {
   public static async registerUser(
