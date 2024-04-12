@@ -7,12 +7,6 @@ import type {
 import AuthService from "../services/auth.service";
 
 class AuthController {
-  public static async registerUser(
-    user: IRegisterUserDTO
-  ): Promise<TRegisterUserResponseDTO> {
-    return await AuthService.registerUser(user);
-  }
-
   public static async loginUser(
     user: ILoginUserDTO
   ): Promise<TLoginUserResponseDTO> {

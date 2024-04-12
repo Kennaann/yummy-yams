@@ -1,7 +1,8 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { IPastry } from "./pastries.interface";
 
 export interface IUser {
+  _id: Types.ObjectId;
   username: string;
   email: string;
   password: string;

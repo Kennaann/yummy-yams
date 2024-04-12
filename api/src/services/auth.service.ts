@@ -2,9 +2,8 @@ import type { IUserTokenData } from "../interfaces/user.interface";
 import jwt from "jsonwebtoken";
 import ConfigService from "./config.service";
 import UserService from "./user.service";
-import mangoose from "mongoose";
 import type {
-  IAuthUserResponseDTO,
+  AuthUserResponseDTO,
   ILoginUserDTO,
   IRegisterUserDTO,
 } from "../interfaces/auth.interface";
@@ -13,11 +12,19 @@ import type { Request, Response, NextFunction } from "express";
 class AuthService {
   public static async registerUser(
     data: IRegisterUserDTO
-  ): Promise<IAuthUserResponseDTO<IRegisterUserDTO>> {
+  ): Promise<AuthUserResponseDTO<IRegisterUserDTO>> {
     try {
-      const userModel = await UserService.createUser(data);
+      const response = await UserService.createUser(data);
 
-      const { email, username, role } = userModel.toObject();
+      if (response.errors) {
+        return {
+          code: 400,
+          message: "Validation errors",
+          errors: response.errors,
+        };
+      }
+
+      const { email, username, role } = response.data;
       const token = this.generateAccessToken({ email, role });
 
       return {
@@ -27,15 +34,11 @@ class AuthService {
           email,
           username,
           role,
+          token,
         },
-        token,
       };
     } catch (error) {
-      if (error instanceof mangoose.Error.ValidationError) {
-        return UserService.handleValidationErrors(error);
-      }
-
-      console.error("UserService.creataUser : ", error);
+      console.error("AuthService.registerUser :", error);
 
       return {
         code: 500,
@@ -46,7 +49,7 @@ class AuthService {
 
   public static async loginUser(
     data: ILoginUserDTO
-  ): Promise<IAuthUserResponseDTO<ILoginUserDTO>> {
+  ): Promise<AuthUserResponseDTO<ILoginUserDTO>> {
     try {
       const user = await UserService.findUserByEmail(data.email);
       if (!user) {
@@ -76,8 +79,8 @@ class AuthService {
           email: user.email,
           username: user.username,
           role: user.role,
+          token,
         },
-        token,
       };
     } catch (error) {
       console.error("AuthService.loginUser : ", error);

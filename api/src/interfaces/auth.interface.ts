@@ -1,4 +1,4 @@
-import type { TValidationErrorsDTO } from "./utils.interface";
+import type { ApiResponseDTO, ValidationErrorsDTO } from "./utils.interface";
 import type { TUserRoles } from "./user.interface";
 
 export interface IRegisterUserDTO {
@@ -13,17 +13,16 @@ export interface ILoginUserDTO {
   password: string;
 }
 
-export interface IAuthUserResponseDTO<T> {
-  code: number;
-  message: string;
-  data?: {
-    email: string;
-    username: string;
-    role: TUserRoles;
-  };
+interface IAuthUserData {
+  email: string;
+  username: string;
+  role: TUserRoles;
   token?: string;
-  errors?: TValidationErrorsDTO<T>;
 }
 
-export type TRegisterUserResponseDTO = IAuthUserResponseDTO<IRegisterUserDTO>;
-export type TLoginUserResponseDTO = IAuthUserResponseDTO<ILoginUserDTO>;
+export type AuthUserResponseDTO<T> = ApiResponseDTO<
+  IAuthUserData,
+  ValidationErrorsDTO<T>
+>;
+export type TRegisterUserResponseDTO = AuthUserResponseDTO<IRegisterUserDTO>;
+export type TLoginUserResponseDTO = AuthUserResponseDTO<ILoginUserDTO>;

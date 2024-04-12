@@ -51,11 +51,13 @@ const UserSchema = new Schema<IUser, TUserModel, IUserMethods>({
     min: 0,
   },
   prize: {
-    pastries: [PastrySchema],
-    createdAt: {
-      type: Date,
-      required: true,
+    type: {
+      pastries: [PastrySchema],
+      createdAt: {
+        type: Date,
+      },
     },
+    required: false,
   },
 });
 
