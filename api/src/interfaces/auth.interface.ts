@@ -1,4 +1,4 @@
-import type { TValidationErrorsDTO } from "./errors.interface";
+import type { TValidationErrorsDTO } from "./utils.interface";
 import type { TUserRoles } from "./user.interface";
 
 export interface IRegisterUserDTO {

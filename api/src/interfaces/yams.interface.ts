@@ -5,12 +5,14 @@ export type YamsResult = {
   dices: number[];
 };
 
-export enum YamsCombinations {
-  YAMS = "YAMS",
-  SQUARE = "SQUARE",
-  DOUBLE = "DOUBLE",
-  NOTHING = "NOTHING",
+export enum YamsCombinationsToPastriesCountMap {
+  YAMS = 3,
+  SQUARE = 2,
+  DOUBLE = 1,
+  NOTHING = 0,
 }
+
+export type YamsCombinations = keyof typeof YamsCombinationsToPastriesCountMap;
 
 export interface IGetYamsResultsResponseDTO {
   code: number;

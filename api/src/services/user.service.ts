@@ -2,10 +2,11 @@ import {
   IAuthUserResponseDTO,
   IRegisterUserDTO,
 } from "../interfaces/auth.interface";
-import type { TValidationErrorsDTO } from "../interfaces/errors.interface";
+import type { TValidationErrorsDTO } from "../interfaces/utils.interface";
 import type { ICreateUserModel } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
-import mangoose from "mongoose";
+import mangoose, { Types } from "mongoose";
+import { IPastry } from "../interfaces/pastries.interface";
 
 class UserService {
   public static async createUser(data: IRegisterUserDTO) {
@@ -35,6 +36,23 @@ class UserService {
       message: "Validation error",
       errors,
     };
+  }
+
+  public static async updateUser(email: string, pastries: IPastry[] | null) {
+    if (!pastries) {
+      return await UserModel.findOneAndUpdate(
+        { email },
+        { $inc: { attempts: 1 } }
+      ).exec();
+    }
+
+    return await UserModel.findOneAndUpdate(
+      { email },
+      {
+        attempts: 0,
+        prize: { pastries, createdAt: Date.now() },
+      }
+    ).exec();
   }
 }
 

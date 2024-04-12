@@ -5,6 +5,7 @@ import type {
   IUserMethods,
   TUserModel,
 } from "../interfaces/user.interface";
+import { PastrySchema } from "./pastries.model";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
@@ -47,6 +48,13 @@ const UserSchema = new Schema<IUser, TUserModel, IUserMethods>({
     type: Number,
     default: 0,
     max: 3,
+  },
+  prize: {
+    pastries: [PastrySchema],
+    createdAt: {
+      type: Date,
+      required: true,
+    },
   },
 });
 

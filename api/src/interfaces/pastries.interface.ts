@@ -1,11 +1,12 @@
 import { Types } from "mongoose";
 
 export interface IPastry {
-  id: Types.ObjectId;
+  id?: Types.ObjectId;
+  _id?: Types.ObjectId;
   name: string;
   image: string;
-  stock: number;
-  quantityWon: number;
+  stock?: number;
+  quantityWon?: number;
 }
 
 export interface IGetAllPastriesResponseDTO {

@@ -1,12 +1,14 @@
-import type { IPastry } from "../interfaces/pastries.interface";
+import { IPastry } from "../interfaces/pastries.interface";
 import {
   type IGetYamsResultsResponseDTO,
   YamsCombinations,
   type YamsResult,
 } from "../interfaces/yams.interface";
+import PastriesService from "./pastries.service";
+import UserService from "./user.service";
 
 class YamsService {
-  private static readonly DICE_FACES = 6;
+  private static readonly DICE_FACES = 1;
   private static readonly DICE_COUNT = 5;
 
   public static async getYamsResults(): Promise<IGetYamsResultsResponseDTO> {
@@ -19,8 +21,9 @@ class YamsService {
         result,
       },
     };
-    if (result.combination !== YamsCombinations.NOTHING) {
-      response.data.pastries = {} as IPastry[];
+
+    if (result.combination !== "NOTHING") {
+      response.data.pastries = await this.handleWinningGame(result.combination);
     }
 
     return response;
@@ -37,11 +40,10 @@ class YamsService {
     }
     const highestCombination = Math.max(...combinations);
 
-    let result = YamsCombinations.NOTHING;
-
-    if (highestCombination > 4) result = YamsCombinations.YAMS;
-    if (highestCombination > 3) result = YamsCombinations.SQUARE;
-    if (this.isDouble(combinations)) result = YamsCombinations.DOUBLE;
+    let result: YamsCombinations = "NOTHING";
+    if (this.isDouble(combinations)) result = "DOUBLE";
+    if (highestCombination > 3) result = "SQUARE";
+    if (highestCombination > 4) result = "YAMS";
 
     return {
       combination: result,
@@ -51,6 +53,15 @@ class YamsService {
 
   private static isDouble(combinations: number[]): boolean {
     return combinations.filter((num) => num === 2).length > 1;
+  }
+
+  private static async handleWinningGame(
+    combination: YamsCombinations
+  ): Promise<IPastry[]> {
+    const pastries = await PastriesService.getWinnerPastriesFor(combination);
+    await UserService.updateUser("mail@mail.com", pastries);
+
+    return pastries;
   }
 }
 

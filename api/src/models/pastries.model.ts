@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const PastrySchema = new Schema({
+export const PastrySchema = new Schema({
   name: {
     type: String,
     required: true,

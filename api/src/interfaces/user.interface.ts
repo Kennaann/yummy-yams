@@ -1,4 +1,5 @@
 import { Model } from "mongoose";
+import { IPastry } from "./pastries.interface";
 
 export interface IUser {
   username: string;
@@ -8,6 +9,10 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   attempts: number;
+  prize: {
+    pastries: Partial<IPastry>[];
+    createdAt: Date;
+  };
   methods: IUserMethods;
 }
 
