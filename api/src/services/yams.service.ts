@@ -16,18 +16,27 @@ class YamsService {
   public static async getYamsResults(
     userEmail: string
   ): Promise<IGetYamsResultsResponseDTO> {
-    const userResponse = await UserRepository.findUserByEmail(userEmail);
-    const isUserAuthorized = await this.isUserAuthorized(userResponse.data);
-    if (!isUserAuthorized) {
+    try {
+      const userResponse = await UserRepository.findUserByEmail(userEmail);
+      const isUserAuthorized = await this.isUserAuthorized(userResponse.data);
+      if (!isUserAuthorized) {
+        return {
+          code: 403,
+          message: "No attempts left",
+        };
+      }
+
+      const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
+
+      return await this.handleGameResult(result, userResponse.data!);
+    } catch (error) {
+      console.error("YamsService.getYamsResults: ", error);
+
       return {
-        code: 403,
-        message: "No attempts left",
+        code: 500,
+        message: "Internal server error",
       };
     }
-
-    const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
-
-    return await this.handleGameResult(result, userResponse.data!);
   }
 
   private static getCombination(faces: number, dicesCount: number): YamsResult {

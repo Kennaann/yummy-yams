@@ -38,8 +38,11 @@ class UserRepository {
     };
   }
 
-  public static async updateUser(email: string, data: Partial<IUser>) {
-    UserModel.findOneAndUpdate({ email }, { ...data }).exec();
+  public static async updateUser(
+    email: string,
+    data: Partial<IUser>
+  ): Promise<void> {
+    await UserModel.findOneAndUpdate({ email }, { ...data }).exec();
   }
 
   private static handleCreateUserError(
