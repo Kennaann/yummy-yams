@@ -6,7 +6,7 @@ import type { TValidationErrorsDTO } from "../interfaces/utils.interface";
 import type { ICreateUserModel } from "../interfaces/user.interface";
 import UserModel from "../models/user.model";
 import mangoose, { Types } from "mongoose";
-import { IPastry } from "../interfaces/pastries.interface";
+import type { IPastryModel } from "../interfaces/pastries.interface";
 
 class UserService {
   public static async createUser(data: IRegisterUserDTO) {
@@ -38,7 +38,10 @@ class UserService {
     };
   }
 
-  public static async updateUser(email: string, pastries: IPastry[] | null) {
+  public static async updateUser(
+    email: string,
+    pastries: IPastryModel[] | null
+  ) {
     if (!pastries) {
       return await UserModel.findOneAndUpdate(
         { email },

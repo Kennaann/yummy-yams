@@ -1,6 +1,6 @@
 import {
+  IPastryModel,
   type IGetAllPastriesResponseDTO,
-  type IPastry,
 } from "../interfaces/pastries.interface";
 import {
   YamsCombinations,
@@ -12,7 +12,7 @@ class PastriesService {
   public static async getAllPastries(): Promise<IGetAllPastriesResponseDTO> {
     const response = await PastryModel.find().exec();
 
-    const pastries: Partial<IPastry>[] = response.map((pastry) => {
+    const pastries: Partial<IPastryModel>[] = response.map((pastry) => {
       const { _id, name, image } = pastry.toObject();
       return {
         id: _id,
@@ -30,18 +30,18 @@ class PastriesService {
 
   public static async getWinnerPastriesFor(
     combination: YamsCombinations
-  ): Promise<IPastry[]> {
+  ): Promise<IPastryModel[]> {
     try {
-      const pastries = await PastryModel.aggregate<IPastry>([
+      const pastries = await PastryModel.aggregate<IPastryModel>([
         { $match: { stock: { $gt: 0 } } },
         { $sample: { size: YamsCombinationsToPastriesCountMap[combination] } },
       ]);
 
       for (const pastry of pastries) {
-        await PastryModel.updateOne(
-          { _id: pastry._id },
-          { $inc: { quantityWon: 1, stock: -1 } }
-        ).exec();
+        pastry.stock -= 1;
+        pastry.quantityWon += 1;
+
+        await PastryModel.replaceOne({ _id: pastry._id }, { ...pastry }).exec();
       }
 
       return pastries;

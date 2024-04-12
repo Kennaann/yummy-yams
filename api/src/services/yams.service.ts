@@ -58,9 +58,19 @@ class YamsService {
   private static async handleWinningGame(
     combination: YamsCombinations
   ): Promise<IPastry[]> {
-    const pastries = await PastriesService.getWinnerPastriesFor(combination);
-    await UserService.updateUser("mail@mail.com", pastries);
+    const pastryModels = await PastriesService.getWinnerPastriesFor(
+      combination
+    );
 
+    await UserService.updateUser("mail@mail.com", pastryModels); // TODO: get user email from token
+
+    const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
+      return {
+        id: _id,
+        name,
+        image,
+      };
+    });
     return pastries;
   }
 }
