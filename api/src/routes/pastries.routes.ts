@@ -1,11 +1,10 @@
 import { Request, Response, Router } from "express";
-import PastriesController from "../controllers/pastries.controller";
-import { IGetAllPastriesResponseDTO } from "../interfaces/pastries.interface";
+import PastriesService from "../services/pastries.service";
 
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const { code, ...response } = await PastriesController.getAllPastries();
+  const { code, ...response } = await PastriesService.getAllPastries();
 
   res.status(code).send(response);
 });

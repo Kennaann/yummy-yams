@@ -28,8 +28,14 @@ class UserRepository {
     }
   }
 
-  public static async findUserByEmail(email: string) {
-    return await UserModel.findOne({ email: email }).exec();
+  public static async findUserByEmail(
+    email: string
+  ): Promise<RepositoryResponse<IUser | null>> {
+    const user = await UserModel.findOne({ email: email }).exec();
+
+    return {
+      data: user?.toObject() || null,
+    };
   }
 
   public static async updateUser(email: string, data: Partial<IUser>) {

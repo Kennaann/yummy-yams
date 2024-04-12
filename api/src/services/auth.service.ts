@@ -49,10 +49,14 @@ class AuthService {
   }
 
   public static async loginUser(
-    data: ILoginUserDTO
+    userLogin: ILoginUserDTO
   ): Promise<AuthUserResponseDTO<ILoginUserDTO>> {
     try {
-      const user = await UserRepository.findUserByEmail(data.email);
+      const userResponse = await UserRepository.findUserByEmail(
+        userLogin.email
+      );
+      const user = userResponse.data;
+
       if (!user) {
         return {
           code: 404,
@@ -60,7 +64,10 @@ class AuthService {
         };
       }
 
-      const isValidPassword = await user.isValidPassword(data.password);
+      const isValidPassword = await UserService.isValidPassword(
+        userLogin.password,
+        user.password
+      );
       if (!isValidPassword) {
         return {
           code: 400,

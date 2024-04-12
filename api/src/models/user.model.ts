@@ -1,17 +1,12 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
-import type {
-  IUser,
-  IUserMethods,
-  TUserModel,
-} from "../interfaces/user.interface";
 import { PastrySchema } from "./pastries.model";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&-_])[A-Za-z\d@$!%*#?&-_]{8,}$/;
 
-const UserSchema = new Schema<IUser, TUserModel, IUserMethods>({
+const UserSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -73,10 +68,12 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.methods.isValidPassword = async function isValidPassword(
+UserSchema.statics.comparePasswords = async function comparePasswords(
+  email: string,
   password: string
 ) {
-  return await bcrypt.compare(password, this.password);
+  const user = await this.findOne({ email }).exec();
+  return await bcrypt.compare(password, user?.password || "");
 };
 
 const UserModel = model("User", UserSchema);

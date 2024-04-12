@@ -14,16 +14,9 @@ export interface IUser {
     pastries: Partial<IPastryModel>[];
     createdAt: Date;
   };
-  methods: IUserMethods;
 }
 
 export type TUserRoles = "user" | "admin";
-
-export interface IUserMethods {
-  isValidPassword(password: string): Promise<boolean>;
-}
-
-export type TUserModel = Model<IUser, {}, IUserMethods>;
 
 export interface ICreateUserModel {
   email: string;
