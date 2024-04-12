@@ -4,28 +4,11 @@ import UserRepository from "../repositories/user.repository";
 import { IUser } from "../interfaces/user.interface";
 
 class UserService {
-  public static handleUserAttempt(
-    user: IUser,
-    pastries: IPastryModel[] | null
-  ) {
-    try {
-      const updatedUserProps: Partial<IUser> = {
-        attempts: user.attempts - 1,
-      };
-
-      if (pastries) {
-        updatedUserProps.attempts = 0;
-        updatedUserProps.prize = {
-          pastries,
-          createdAt: new Date(),
-        };
-      }
-
-      return UserRepository.updateUser(user.email, updatedUserProps);
-    } catch (error) {
-      console.error("UserService.handleUserAttempt :", error);
-      return null;
-    }
+  public static handleUserAttempt(user: IUser) {
+    const updatedUserProps: Partial<IUser> = {
+      attempts: user.attempts - 1,
+    };
+    return UserRepository.updateUser(user.email, updatedUserProps);
   }
 
   public static async isValidPassword(password: string, userPassword: string) {

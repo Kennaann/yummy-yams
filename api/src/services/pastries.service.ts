@@ -1,6 +1,7 @@
 import {
   IPastryModel,
   type IGetAllPastriesResponseDTO,
+  IPastry,
 } from "../interfaces/pastries.interface";
 import {
   YamsCombinations,
@@ -48,6 +49,14 @@ class PastriesService {
 
       return [];
     }
+  }
+
+  public static getSerializedPastries(pastryModels: IPastryModel[]) {
+    return pastryModels.map(({ _id, name, image }) => ({
+      id: _id,
+      name,
+      image,
+    }));
   }
 }
 

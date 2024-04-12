@@ -6,7 +6,7 @@ const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&-_])[A-Za-z\d@$!%*#?&-_]{8,}$/;
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   username: {
     type: String,
     required: true,
@@ -44,15 +44,6 @@ const UserSchema = new Schema({
     default: 3,
     max: 3,
     min: 0,
-  },
-  prize: {
-    type: {
-      pastries: [PastrySchema],
-      createdAt: {
-        type: Date,
-      },
-    },
-    required: false,
   },
 });
 

@@ -10,10 +10,6 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   attempts: number;
-  prize: {
-    pastries: Partial<IPastryModel>[];
-    createdAt: Date;
-  };
 }
 
 export type TUserRoles = "user" | "admin";

@@ -1,4 +1,3 @@
-import { IPastry } from "../interfaces/pastries.interface";
 import { IUser } from "../interfaces/user.interface";
 import {
   type IGetYamsResultsResponseDTO,
@@ -8,6 +7,7 @@ import {
 import UserRepository from "../repositories/user.repository";
 import PastriesService from "./pastries.service";
 import UserService from "./user.service";
+import LeaderBoardService from "./leaderboard.service";
 
 class YamsService {
   private static readonly DICE_FACES = 1;
@@ -69,9 +69,9 @@ class YamsService {
     result: YamsResult,
     user: IUser
   ): Promise<IGetYamsResultsResponseDTO> {
-    if (result.combination === "NOTHING") {
-      await UserService.handleUserAttempt(user, null);
+    await UserService.handleUserAttempt(user);
 
+    if (result.combination === "NOTHING") {
       return {
         code: 200,
         message: "OK",
@@ -91,15 +91,9 @@ class YamsService {
         message: "No pastries left in stock",
       };
     }
-    await UserService.handleUserAttempt(user, pastryModels);
+    await LeaderBoardService.updateLeaderBoard(user, pastryModels);
 
-    const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
-      return {
-        id: _id,
-        name,
-        image,
-      };
-    });
+    const pastries = PastriesService.getSerializedPastries(pastryModels);
 
     return {
       code: 200,
