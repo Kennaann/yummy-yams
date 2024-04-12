@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { ApiResponseDTO } from "./utils.interface";
 
 export interface IPastryModel {
   _id: Types.ObjectId;
@@ -14,8 +15,4 @@ export interface IPastry {
   image: string;
 }
 
-export interface IGetAllPastriesResponseDTO {
-  code: number;
-  message: string;
-  data: Partial<IPastry>[];
-}
+export type IGetAllPastriesResponseDTO = ApiResponseDTO<IPastry[], IPastry>;

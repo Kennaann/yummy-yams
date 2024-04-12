@@ -7,44 +7,42 @@ import {
   YamsCombinationsToPastriesCountMap,
 } from "../interfaces/yams.interface";
 import PastryModel from "../models/pastries.model";
+import PastriesRepository from "../repositories/pastries.repository";
 
 class PastriesService {
   public static async getAllPastries(): Promise<IGetAllPastriesResponseDTO> {
-    const response = await PastryModel.find().exec();
+    try {
+      const response = await PastriesRepository.getAllPastries();
 
-    const pastries: Partial<IPastryModel>[] = response.map((pastry) => {
-      const { _id, name, image } = pastry.toObject();
       return {
-        id: _id,
-        name,
-        image,
+        code: 200,
+        message: "Ok",
+        data: response.data!,
       };
-    });
-
-    return {
-      code: 200,
-      message: "Ok",
-      data: pastries,
-    };
+    } catch (error) {
+      return {
+        code: 500,
+        message: "Internal server error",
+      };
+    }
   }
 
   public static async getWinnerPastriesFor(
     combination: YamsCombinations
   ): Promise<IPastryModel[]> {
     try {
-      const pastries = await PastryModel.aggregate<IPastryModel>([
-        { $match: { stock: { $gt: 0 } } },
-        { $sample: { size: YamsCombinationsToPastriesCountMap[combination] } },
-      ]);
+      const pastriesResponse = await PastriesRepository.getRandomPastries(
+        YamsCombinationsToPastriesCountMap[combination]
+      );
 
-      for (const pastry of pastries) {
+      for (const pastry of pastriesResponse.data!) {
         pastry.stock -= 1;
         pastry.quantityWon += 1;
 
         await PastryModel.replaceOne({ _id: pastry._id }, { ...pastry }).exec();
       }
 
-      return pastries;
+      return pastriesResponse.data!;
     } catch (error) {
       console.error("PastriesService.getWinnerPastriesFor: ", error);
 
