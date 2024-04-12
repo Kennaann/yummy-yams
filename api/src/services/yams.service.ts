@@ -17,9 +17,16 @@ class YamsService {
     userEmail: string
   ): Promise<IGetYamsResultsResponseDTO> {
     try {
+      const isGameOpen = await LeaderBoardService.isGameOpen();
+      if (!isGameOpen) {
+        return {
+          code: 403,
+          message: "Game is closed",
+        };
+      }
+
       const userResponse = await UserRepository.findUserByEmail(userEmail);
-      const isUserAuthorized = await this.isUserAuthorized(userResponse.data);
-      if (!isUserAuthorized) {
+      if (!userResponse.data || userResponse.data.attempts === 0) {
         return {
           code: 403,
           message: "No attempts left",
@@ -86,6 +93,8 @@ class YamsService {
     );
 
     if (pastryModels.length < 1) {
+      LeaderBoardService.closeLeaderboard();
+
       return {
         code: 500,
         message: "No pastries left in stock",
@@ -103,14 +112,6 @@ class YamsService {
         pastries,
       },
     };
-  }
-
-  private static async isUserAuthorized(
-    user: IUser | null | undefined
-  ): Promise<boolean> {
-    if (!user || user.attempts < 1) return false;
-
-    return true;
   }
 }
 
