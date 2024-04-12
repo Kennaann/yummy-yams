@@ -46,8 +46,9 @@ const UserSchema = new Schema<IUser, TUserModel, IUserMethods>({
   },
   attempts: {
     type: Number,
-    default: 0,
+    default: 3,
     max: 3,
+    min: 0,
   },
   prize: {
     pastries: [PastrySchema],

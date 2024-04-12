@@ -17,7 +17,7 @@ export type YamsCombinations = keyof typeof YamsCombinationsToPastriesCountMap;
 export interface IGetYamsResultsResponseDTO {
   code: number;
   message: string;
-  data: {
+  data?: {
     result: YamsResult;
     pastries?: IPastry[];
   };

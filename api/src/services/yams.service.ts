@@ -3,6 +3,7 @@ import {
   type IGetYamsResultsResponseDTO,
   YamsCombinations,
   type YamsResult,
+  YamsCombinationsToPastriesCountMap,
 } from "../interfaces/yams.interface";
 import PastriesService from "./pastries.service";
 import UserService from "./user.service";
@@ -14,24 +15,17 @@ class YamsService {
   public static async getYamsResults(
     userId: string
   ): Promise<IGetYamsResultsResponseDTO> {
-    const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
-
-    const response: IGetYamsResultsResponseDTO = {
-      code: 200,
-      message: "OK",
-      data: {
-        result,
-      },
-    };
-
-    if (result.combination !== "NOTHING") {
-      response.data.pastries = await this.handleWinningGame(
-        result.combination,
-        userId
-      );
+    const isUserAuthorized = await this.isUserAuthorized(userId);
+    if (!isUserAuthorized) {
+      return {
+        code: 403,
+        message: "Max attempts reached.",
+      };
     }
 
-    return response;
+    const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
+
+    return await this.handleGameResult(result, userId);
   }
 
   private static getCombination(faces: number, dicesCount: number): YamsResult {
@@ -60,15 +54,35 @@ class YamsService {
     return combinations.filter((num) => num === 2).length > 1;
   }
 
-  private static async handleWinningGame(
-    combination: YamsCombinations,
+  private static async handleGameResult(
+    result: YamsResult,
     userId: string
-  ): Promise<IPastry[]> {
+  ): Promise<IGetYamsResultsResponseDTO> {
+    if (result.combination === "NOTHING") {
+      await UserService.updateUser(userId, null);
+
+      return {
+        code: 200,
+        message: "OK",
+        data: {
+          result,
+        },
+      };
+    }
+
     const pastryModels = await PastriesService.getWinnerPastriesFor(
-      combination
+      result.combination
     );
 
-    await UserService.updateUser(userId, pastryModels);
+    if (
+      pastryModels.length <
+      YamsCombinationsToPastriesCountMap[result.combination]
+    ) {
+      return {
+        code: 500,
+        message: "No pastries left in stock",
+      };
+    }
 
     const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
       return {
@@ -77,7 +91,23 @@ class YamsService {
         image,
       };
     });
-    return pastries;
+
+    return {
+      code: 200,
+      message: "OK",
+      data: {
+        result,
+        pastries,
+      },
+    };
+  }
+
+  private static async isUserAuthorized(userId: string): Promise<boolean> {
+    const user = await UserService.findUserByEmail(userId);
+
+    if (!user || user?.toObject().attempts < 1) return false;
+
+    return true;
   }
 }
 
