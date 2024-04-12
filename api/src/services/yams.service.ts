@@ -11,7 +11,9 @@ class YamsService {
   private static readonly DICE_FACES = 1;
   private static readonly DICE_COUNT = 5;
 
-  public static async getYamsResults(): Promise<IGetYamsResultsResponseDTO> {
+  public static async getYamsResults(
+    userId: string
+  ): Promise<IGetYamsResultsResponseDTO> {
     const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
 
     const response: IGetYamsResultsResponseDTO = {
@@ -23,7 +25,10 @@ class YamsService {
     };
 
     if (result.combination !== "NOTHING") {
-      response.data.pastries = await this.handleWinningGame(result.combination);
+      response.data.pastries = await this.handleWinningGame(
+        result.combination,
+        userId
+      );
     }
 
     return response;
@@ -56,13 +61,14 @@ class YamsService {
   }
 
   private static async handleWinningGame(
-    combination: YamsCombinations
+    combination: YamsCombinations,
+    userId: string
   ): Promise<IPastry[]> {
     const pastryModels = await PastriesService.getWinnerPastriesFor(
       combination
     );
 
-    await UserService.updateUser("mail@mail.com", pastryModels); // TODO: get user email from token
+    await UserService.updateUser(userId, pastryModels);
 
     const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
       return {
