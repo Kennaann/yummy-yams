@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express";
-import AuthController from "../controllers/auth.controller";
 import type { IRegisterUserDTO } from "../interfaces/auth.interface";
 import AuthService from "../services/auth.service";
 
@@ -15,7 +14,7 @@ router.post(
 );
 
 router.post("/login", async (req: Request, res: Response) => {
-  const { code, ...response } = await AuthController.loginUser(req.body);
+  const { code, ...response } = await AuthService.loginUser(req.body);
 
   res.status(code).send(response);
 });

@@ -1,10 +1,11 @@
 import { IPastry } from "../interfaces/pastries.interface";
+import { IUser } from "../interfaces/user.interface";
 import {
   type IGetYamsResultsResponseDTO,
   YamsCombinations,
   type YamsResult,
-  YamsCombinationsToPastriesCountMap,
 } from "../interfaces/yams.interface";
+import UserRepository from "../repositories/user.repository";
 import PastriesService from "./pastries.service";
 import UserService from "./user.service";
 
@@ -13,19 +14,20 @@ class YamsService {
   private static readonly DICE_COUNT = 5;
 
   public static async getYamsResults(
-    userId: string
+    userEmail: string
   ): Promise<IGetYamsResultsResponseDTO> {
-    const isUserAuthorized = await this.isUserAuthorized(userId);
+    const user = await UserRepository.findUserByEmail(userEmail);
+    const isUserAuthorized = await this.isUserAuthorized(user?.toObject());
     if (!isUserAuthorized) {
       return {
         code: 403,
-        message: "Max attempts reached.",
+        message: "No attempts left",
       };
     }
 
     const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
 
-    return await this.handleGameResult(result, userId);
+    return await this.handleGameResult(result, user!.toObject());
   }
 
   private static getCombination(faces: number, dicesCount: number): YamsResult {
@@ -56,10 +58,10 @@ class YamsService {
 
   private static async handleGameResult(
     result: YamsResult,
-    userId: string
+    user: IUser
   ): Promise<IGetYamsResultsResponseDTO> {
     if (result.combination === "NOTHING") {
-      await UserService.updateUser(userId, null);
+      await UserService.handleUserAttempt(user, null);
 
       return {
         code: 200,
@@ -74,16 +76,13 @@ class YamsService {
       result.combination
     );
 
-    if (
-      pastryModels.length <
-      YamsCombinationsToPastriesCountMap[result.combination]
-    ) {
+    if (pastryModels.length < 1) {
       return {
         code: 500,
         message: "No pastries left in stock",
       };
     }
-    await UserService.updateUser(userId, pastryModels);
+    await UserService.handleUserAttempt(user, pastryModels);
 
     const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
       return {
@@ -103,10 +102,10 @@ class YamsService {
     };
   }
 
-  private static async isUserAuthorized(userId: string): Promise<boolean> {
-    const user = await UserService.findUserByEmail(userId);
-
-    if (!user || user?.toObject().attempts < 1) return false;
+  private static async isUserAuthorized(
+    user: IUser | undefined
+  ): Promise<boolean> {
+    if (!user || user.attempts < 1) return false;
 
     return true;
   }

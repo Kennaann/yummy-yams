@@ -1,5 +1,5 @@
 import { Model, Types } from "mongoose";
-import { IPastry } from "./pastries.interface";
+import type { IPastryModel } from "./pastries.interface";
 
 export interface IUser {
   _id: Types.ObjectId;
@@ -11,7 +11,7 @@ export interface IUser {
   updatedAt: Date;
   attempts: number;
   prize: {
-    pastries: Partial<IPastry>[];
+    pastries: Partial<IPastryModel>[];
     createdAt: Date;
   };
   methods: IUserMethods;

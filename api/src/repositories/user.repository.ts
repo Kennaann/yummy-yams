@@ -36,7 +36,7 @@ class UserRepository {
     UserModel.findOneAndUpdate({ email }, { ...data }).exec();
   }
 
-  public static handleCreateUserError(
+  private static handleCreateUserError(
     error: unknown
   ): RepositoryResponse<IUser> {
     if (error instanceof mangoose.Error.ValidationError) {

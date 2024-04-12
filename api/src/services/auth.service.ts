@@ -8,13 +8,14 @@ import type {
   IRegisterUserDTO,
 } from "../interfaces/auth.interface";
 import type { Request, Response, NextFunction } from "express";
+import UserRepository from "../repositories/user.repository";
 
 class AuthService {
   public static async registerUser(
     data: IRegisterUserDTO
   ): Promise<AuthUserResponseDTO<IRegisterUserDTO>> {
     try {
-      const response = await UserService.createUser(data);
+      const response = await UserRepository.createUser(data);
 
       if (response.errors) {
         return {
@@ -51,7 +52,7 @@ class AuthService {
     data: ILoginUserDTO
   ): Promise<AuthUserResponseDTO<ILoginUserDTO>> {
     try {
-      const user = await UserService.findUserByEmail(data.email);
+      const user = await UserRepository.findUserByEmail(data.email);
       if (!user) {
         return {
           code: 404,
