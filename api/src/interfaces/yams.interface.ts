@@ -1,6 +1,11 @@
 import type { IPastry } from "./pastries.interface";
 
-export enum YamsResult {
+export type YamsResult = {
+  combination: YamsCombinations;
+  dices: number[];
+};
+
+export enum YamsCombinations {
   YAMS = "YAMS",
   SQUARE = "SQUARE",
   DOUBLE = "DOUBLE",
@@ -11,7 +16,7 @@ export interface IGetYamsResultsResponseDTO {
   code: number;
   message: string;
   data: {
-    result: keyof typeof YamsResult;
+    result: YamsResult;
     pastries?: IPastry[];
   };
 }

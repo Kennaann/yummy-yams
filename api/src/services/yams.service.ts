@@ -1,67 +1,56 @@
 import type { IPastry } from "../interfaces/pastries.interface";
 import {
   type IGetYamsResultsResponseDTO,
-  YamsResult,
+  YamsCombinations,
+  type YamsResult,
 } from "../interfaces/yams.interface";
 
 class YamsService {
+  private static readonly DICE_FACES = 6;
+  private static readonly DICE_COUNT = 5;
+
   public static async getYamsResults(): Promise<IGetYamsResultsResponseDTO> {
-    const combination = this.getCombination(3);
+    const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
 
     const response: IGetYamsResultsResponseDTO = {
       code: 200,
       message: "OK",
       data: {
-        result: combination,
+        result,
       },
     };
-    if (combination !== YamsResult.NOTHING) {
+    if (result.combination !== YamsCombinations.NOTHING) {
       response.data.pastries = {} as IPastry[];
     }
 
     return response;
   }
 
-  private static getCombination(faces: number): YamsResult {
-    const combinations = Array.from({ length: 5 }, () => 0);
+  private static getCombination(faces: number, dicesCount: number): YamsResult {
+    const combinations = Array.from({ length: faces }, () => 0);
+    const dices: number[] = [];
 
-    for (let i = 0; i < combinations.length; i++) {
+    for (let i = 0; i < dicesCount; i++) {
       const randomNumber = Math.floor(Math.random() * faces);
-
       combinations[randomNumber]++;
+      dices.push(randomNumber + 1);
     }
-
-    console.log(combinations);
-
     const highestCombination = Math.max(...combinations);
 
-    if (highestCombination > 4) return YamsResult.YAMS;
-    if (highestCombination > 3) return YamsResult.SQUARE;
+    let result = YamsCombinations.NOTHING;
 
-    if (this.isDouble(combinations)) return YamsResult.DOUBLE;
+    if (highestCombination > 4) result = YamsCombinations.YAMS;
+    if (highestCombination > 3) result = YamsCombinations.SQUARE;
+    if (this.isDouble(combinations)) result = YamsCombinations.DOUBLE;
 
-    return YamsResult.NOTHING;
+    return {
+      combination: result,
+      dices,
+    };
   }
 
   private static isDouble(combinations: number[]): boolean {
-    let count = 0;
-
-    for (let i = 0; i < combinations.length; i++) {
-      if (combinations[i] === undefined) continue;
-
-      for (let j = i + 1; j < combinations.length; j++) {
-        if (combinations[i] === combinations[j]) {
-          count++;
-
-          delete combinations[i];
-          delete combinations[j];
-
-          break;
-        }
-      }
-    }
-
-    return count > 1;
+    return combinations.filter((num) => num === 2).length > 1;
   }
 }
 
