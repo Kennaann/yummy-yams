@@ -83,6 +83,7 @@ class YamsService {
         message: "No pastries left in stock",
       };
     }
+    await UserService.updateUser(userId, pastryModels);
 
     const pastries: IPastry[] = pastryModels.map(({ _id, name, image }) => {
       return {
