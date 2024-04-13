@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import type { IRegisterUserDTO } from "../interfaces/auth.interface";
-import AuthService from "../services/auth.service";
 import tryCatch from "../utils/try-catch.util";
+import AuthController from "../controllers/auth.controller";
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.post(
   "/register",
   async (req: Request<{}, {}, IRegisterUserDTO>, res: Response) => {
     const { code, ...response } = await tryCatch<IRegisterUserDTO>(
-      AuthService.registerUser.bind(AuthService),
+      AuthController.registerUser.bind(AuthController),
       req.body
     );
 
@@ -19,7 +19,7 @@ router.post(
 
 router.post("/login", async (req: Request, res: Response) => {
   const { code, ...response } = await tryCatch(
-    AuthService.loginUser.bind(AuthService),
+    AuthController.loginUser.bind(AuthController),
     req.body
   );
 

@@ -10,14 +10,12 @@ import PastryModel from "../models/pastries.model";
 import PastriesRepository from "../repositories/pastries.repository";
 
 class PastriesService {
-  public static async getAllPastries(): Promise<IGetAllPastriesResponseDTO> {
-    const response = await PastriesRepository.getAllPastries();
-
-    return {
-      code: 200,
-      message: "Ok",
-      data: response.data!,
-    };
+  public static getSerializedPastries(pastryModels: IPastryModel[]) {
+    return pastryModels.map(({ _id, name, image }) => ({
+      id: _id,
+      name,
+      image,
+    }));
   }
 
   public static async getWinnerPastriesFor(
@@ -41,14 +39,6 @@ class PastriesService {
 
       return [];
     }
-  }
-
-  public static getSerializedPastries(pastryModels: IPastryModel[]) {
-    return pastryModels.map(({ _id, name, image }) => ({
-      id: _id,
-      name,
-      image,
-    }));
   }
 }
 
