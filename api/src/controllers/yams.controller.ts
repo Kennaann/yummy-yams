@@ -52,6 +52,7 @@ class YamsController {
         message: "OK",
         data: {
           result,
+          attempts: user.attempts + 1,
         },
       };
     }
@@ -80,6 +81,7 @@ class YamsController {
       data: {
         result,
         pastries,
+        attempts: this.MAX_ATTEMPTS,
       },
     };
   }

@@ -18,6 +18,7 @@ export type YamsCombinations = keyof typeof YamsCombinationsToPastriesCountMap;
 export interface YamsResults {
   result: YamsResult;
   pastries?: IPastry[];
+  attempts: number;
 }
 
 export type GetYamsResultsResponseDTO = ApiResponseDTO<YamsResults>;
