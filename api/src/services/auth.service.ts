@@ -1,5 +1,6 @@
-import type { IUserTokenData } from "../interfaces/user.interface";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import type { IUserTokenData } from "../interfaces/user.interface";
 import ConfigService from "./config.service";
 import UserService from "./user.service";
 import type {
@@ -64,7 +65,7 @@ class AuthService {
         };
       }
 
-      const isValidPassword = await UserService.isValidPassword(
+      const isValidPassword = await this.isValidPassword(
         userLogin.password,
         user.password
       );
@@ -132,6 +133,10 @@ class AuthService {
         next();
       }
     );
+  }
+
+  private static async isValidPassword(password: string, userPassword: string) {
+    return bcrypt.compare(password, userPassword);
   }
 }
 
