@@ -34,7 +34,7 @@ class UserRepository {
     const user = await UserModel.findOne({ email: email }).exec();
 
     return {
-      data: user?.toObject() || null,
+      data: user?.toObject() ?? null,
     };
   }
 

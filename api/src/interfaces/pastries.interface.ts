@@ -15,4 +15,4 @@ export interface IPastry {
   image: string;
 }
 
-export type IGetAllPastriesResponseDTO = ApiResponseDTO<IPastry[], IPastry>;
+export type IGetAllPastriesResponseDTO = ApiResponseDTO<IPastry[]>;

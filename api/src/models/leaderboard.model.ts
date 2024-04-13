@@ -7,8 +7,8 @@ export const LeaderBoardSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  wins: {
-    type: {
+  wins: [
+    {
       winner: {
         username: UserSchema.path("username"),
         email: UserSchema.path("email"),
@@ -24,7 +24,7 @@ export const LeaderBoardSchema = new Schema({
         default: Date.now(),
       },
     },
-  },
+  ],
   createdAt: {
     type: Date,
     default: Date.now(),

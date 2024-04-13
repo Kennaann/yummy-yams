@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
-import { PastrySchema } from "./pastries.model";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
@@ -58,14 +57,6 @@ UserSchema.pre("save", async function (next) {
   }
   next();
 });
-
-UserSchema.statics.comparePasswords = async function comparePasswords(
-  email: string,
-  password: string
-) {
-  const user = await this.findOne({ email }).exec();
-  return await bcrypt.compare(password, user?.password || "");
-};
 
 const UserModel = model("User", UserSchema);
 

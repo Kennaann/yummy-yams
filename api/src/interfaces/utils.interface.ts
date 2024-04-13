@@ -9,7 +9,7 @@ export type RepositoryResponse<T> =
     }
   | { data?: never; errors: ValidationErrorsDTO<T> };
 
-export type ApiResponseDTO<T, E> = {
+export type ApiResponseDTO<T, E = null> = {
   code: number;
   message: string;
   data?: T;

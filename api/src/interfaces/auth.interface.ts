@@ -20,9 +20,9 @@ interface IAuthUserData {
   token?: string;
 }
 
-export type AuthUserResponseDTO<T> = ApiResponseDTO<
+export type AuthUserResponseDTO<T = null> = ApiResponseDTO<
   IAuthUserData,
-  ValidationErrorsDTO<T>
+  ValidationErrorsDTO<T extends null ? never : T>
 >;
-export type TRegisterUserResponseDTO = AuthUserResponseDTO<IRegisterUserDTO>;
-export type TLoginUserResponseDTO = AuthUserResponseDTO<ILoginUserDTO>;
+export type RegisterUserResponseDTO = AuthUserResponseDTO<IRegisterUserDTO>;
+export type LoginUserResponseDTO = AuthUserResponseDTO;
