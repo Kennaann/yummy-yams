@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&-_])[A-Za-z\d@$!%*#?&-_]{8,}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?\&\-\_])[A-Za-z\d@$!%*#?\&\-\_]{8,}$/;
 
 export const UserSchema = new Schema({
   username: {
