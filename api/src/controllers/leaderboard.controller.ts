@@ -3,7 +3,7 @@ import { ApiResponseDTO } from "../interfaces/utils.interface";
 import { GetLeaderBoardWinsResponseDTO } from "../interfaces/leaderboard.interface";
 
 class LeaderBoardController {
-  public static async isGameOpen(): Promise<ApiResponseDTO<boolean>> {
+  public static async isGameOpen(): ApiResponseDTO<boolean> {
     const response = await LeaderBoardRepository.isLeaderboardOpen();
 
     return {
@@ -13,7 +13,7 @@ class LeaderBoardController {
     };
   }
 
-  public static async getCurrentLeaderboardWins(): Promise<GetLeaderBoardWinsResponseDTO> {
+  public static async getCurrentLeaderboardWins(): GetLeaderBoardWinsResponseDTO {
     const currentLeaderboardResponse =
       await LeaderBoardRepository.getCurrentLeaderboard();
 

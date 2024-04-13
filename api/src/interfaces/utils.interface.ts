@@ -9,9 +9,9 @@ export type RepositoryResponse<T> =
     }
   | { data?: never; errors: ValidationErrorsDTO<T> };
 
-export type ApiResponseDTO<T, E = null> = {
+export type ApiResponseDTO<T, E = undefined> = Promise<{
   code: number;
   message: string;
   data?: T;
   errors?: E;
-};
+}>;

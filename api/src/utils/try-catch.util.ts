@@ -1,9 +1,9 @@
 import { ApiResponseDTO } from "../interfaces/utils.interface";
 
-const tryCatch = async <T>(
+const tryCatch = async <T, E = undefined>(
   callback: any,
   callbackParams?: any
-): Promise<ApiResponseDTO<T>> => {
+): ApiResponseDTO<T, E> => {
   try {
     return await callback(callbackParams);
   } catch (error) {
