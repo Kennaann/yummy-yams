@@ -3,7 +3,7 @@ import LeaderBoardService from "../services/leaderboard.service";
 
 const router = Router();
 
-router.get("/", async (_req, res) => {
+router.get("/wins", async (_req, res) => {
   const { code, ...response } =
     await LeaderBoardService.getCurrentLeaderboardWins();
 
