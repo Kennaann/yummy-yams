@@ -1,4 +1,5 @@
 import type { IPastry } from "./pastries.interface";
+import { ApiResponseDTO } from "./utils.interface";
 
 export type YamsResult = {
   combination: YamsCombinations;
@@ -14,11 +15,9 @@ export enum YamsCombinationsToPastriesCountMap {
 
 export type YamsCombinations = keyof typeof YamsCombinationsToPastriesCountMap;
 
-export interface IGetYamsResultsResponseDTO {
-  code: number;
-  message: string;
-  data?: {
-    result: YamsResult;
-    pastries?: IPastry[];
-  };
+export interface YamsResults {
+  result: YamsResult;
+  pastries?: IPastry[];
 }
+
+export type GetYamsResultsResponseDTO = ApiResponseDTO<YamsResults>;

@@ -1,7 +1,4 @@
-import {
-  IPastryModel,
-  type IGetAllPastriesResponseDTO,
-} from "../interfaces/pastries.interface";
+import { IPastryModel } from "../interfaces/pastries.interface";
 import {
   YamsCombinations,
   YamsCombinationsToPastriesCountMap,

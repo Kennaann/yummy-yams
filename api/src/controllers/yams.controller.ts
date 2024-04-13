@@ -1,6 +1,6 @@
 import { IUser } from "../interfaces/user.interface";
 import {
-  IGetYamsResultsResponseDTO,
+  GetYamsResultsResponseDTO,
   YamsResult,
 } from "../interfaces/yams.interface";
 import LeaderBoardRepository from "../repositories/leaderboard.repository";
@@ -17,7 +17,7 @@ class YamsController {
 
   public static async getYamsResults(
     userEmail: string
-  ): Promise<IGetYamsResultsResponseDTO> {
+  ): GetYamsResultsResponseDTO {
     const isGameOpenResponse = await LeaderBoardRepository.isLeaderboardOpen();
 
     if (!isGameOpenResponse.data) {
@@ -37,13 +37,13 @@ class YamsController {
 
     const result = YamsService.getCombination(this.DICE_FACES, this.DICE_COUNT);
 
-    return await this.handleGameResult(result, userResponse.data!);
+    return await this.handleGameResult(result, userResponse.data);
   }
 
   private static async handleGameResult(
     result: YamsResult,
     user: IUser
-  ): Promise<IGetYamsResultsResponseDTO> {
+  ): GetYamsResultsResponseDTO {
     if (result.combination === "NOTHING") {
       await UserService.updateUserAttempts(user, 1);
 

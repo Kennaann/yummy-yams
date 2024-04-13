@@ -13,7 +13,7 @@ export interface ILoginUserDTO {
   password: string;
 }
 
-interface IAuthUserData {
+export interface IAuthUserData {
   email: string;
   username: string;
   role: TUserRoles;
@@ -24,5 +24,3 @@ export type AuthUserResponseDTO<T = null> = ApiResponseDTO<
   IAuthUserData,
   ValidationErrorsDTO<T extends null ? never : T>
 >;
-export type RegisterUserResponseDTO = AuthUserResponseDTO<IRegisterUserDTO>;
-export type LoginUserResponseDTO = AuthUserResponseDTO;

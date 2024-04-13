@@ -9,7 +9,7 @@ import AuthService from "../services/auth.service";
 class AuthController {
   public static async registerUser(
     data: IRegisterUserDTO
-  ): Promise<AuthUserResponseDTO<IRegisterUserDTO>> {
+  ): AuthUserResponseDTO<IRegisterUserDTO> {
     const response = await UserRepository.createUser(data);
 
     if (response.errors) {
@@ -37,7 +37,7 @@ class AuthController {
 
   public static async loginUser(
     userLogin: ILoginUserDTO
-  ): Promise<AuthUserResponseDTO<ILoginUserDTO>> {
+  ): AuthUserResponseDTO<ILoginUserDTO> {
     const userResponse = await UserRepository.findUserByEmail(userLogin.email);
     const user = userResponse.data;
 
