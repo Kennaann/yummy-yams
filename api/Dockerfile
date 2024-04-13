@@ -1,14 +1,8 @@
-# Use the official Node.js image as the base image
 FROM node:20
 
 WORKDIR /usr/src/app
 
 ENV NODE_TLS_REJECT_UNAUTHORIZED 0
-
-COPY package*.json ./
-COPY cert.pem .
-
-RUN npm config set cafile cert.pem && npm install
 
 COPY . .
 
