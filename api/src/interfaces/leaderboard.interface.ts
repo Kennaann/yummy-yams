@@ -9,5 +9,6 @@ export interface ILeaderBoardModel {
     winner: Partial<IUser>;
     prize: Partial<IPastryModel>[];
     createdAt?: Date;
+    updatedAt?: Date;
   };
 }

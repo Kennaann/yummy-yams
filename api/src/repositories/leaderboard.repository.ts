@@ -6,7 +6,7 @@ class LeaderBoardRepository {
   public static async addEntry(leaderboardEntry: ILeaderBoardModel["wins"]) {
     return await LeaderBoardModel.findOneAndUpdate(
       {},
-      { $push: { wins: leaderboardEntry } },
+      { $push: { wins: leaderboardEntry }, $set: { updatedAt: Date.now() } },
       { upsert: true }
     );
   }
@@ -19,7 +19,10 @@ class LeaderBoardRepository {
     id: Types.ObjectId,
     data: Partial<ILeaderBoardModel>
   ) {
-    return await LeaderBoardModel.findOneAndUpdate({ _id: id }, { ...data });
+    return await LeaderBoardModel.findOneAndUpdate(
+      { _id: id },
+      { ...data, updatedAt: Date.now() }
+    );
   }
 }
 

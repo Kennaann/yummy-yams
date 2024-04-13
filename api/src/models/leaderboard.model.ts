@@ -25,6 +25,14 @@ export const LeaderBoardSchema = new Schema({
       },
     },
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const LeaderBoardModel = model("Leaderboard", LeaderBoardSchema);

@@ -1,8 +1,7 @@
-import { Types } from "mongoose";
-import { ILeaderBoardModel } from "../interfaces/leaderboard.interface";
+import type { ILeaderBoardModel } from "../interfaces/leaderboard.interface";
 import LeaderBoardRepository from "../repositories/leaderboard.repository";
-import { IPastryModel } from "../interfaces/pastries.interface";
-import { IUser } from "../interfaces/user.interface";
+import type { IPastryModel } from "../interfaces/pastries.interface";
+import type { IUser } from "../interfaces/user.interface";
 
 class LeaderBoardService {
   public static async updateLeaderBoard(user: IUser, pastries: IPastryModel[]) {
