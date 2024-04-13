@@ -18,3 +18,4 @@ export interface ILeaderBoardWin {
 }
 
 export type GetLeaderBoardWinsResponseDTO = ApiResponseDTO<ILeaderBoardWin[]>;
+export type IsLeaderBoardOpenResponseDTO = ApiResponseDTO<boolean>;

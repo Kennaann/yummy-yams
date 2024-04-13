@@ -8,6 +8,7 @@ import UserRepository from "../repositories/user.repository";
 import PastriesService from "./pastries.service";
 import UserService from "./user.service";
 import LeaderBoardService from "./leaderboard.service";
+import LeaderBoardRepository from "../repositories/leaderboard.repository";
 
 class YamsService {
   private static readonly DICE_FACES = 4;
@@ -18,8 +19,10 @@ class YamsService {
     userEmail: string
   ): Promise<IGetYamsResultsResponseDTO> {
     try {
-      const isGameOpen = await LeaderBoardService.isGameOpen();
-      if (!isGameOpen) {
+      const isGameOpenResponse =
+        await LeaderBoardRepository.isLeaderboardOpen();
+
+      if (!isGameOpenResponse.data) {
         return {
           code: 403,
           message: "Game is closed",

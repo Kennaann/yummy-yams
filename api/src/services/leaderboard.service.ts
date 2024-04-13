@@ -5,6 +5,7 @@ import type {
 import LeaderBoardRepository from "../repositories/leaderboard.repository";
 import type { IPastryModel } from "../interfaces/pastries.interface";
 import type { IUser } from "../interfaces/user.interface";
+import { ApiResponseDTO } from "../interfaces/utils.interface";
 
 class LeaderBoardService {
   public static async updateLeaderBoard(user: IUser, pastries: IPastryModel[]) {
@@ -30,15 +31,21 @@ class LeaderBoardService {
     );
   }
 
-  public static async isGameOpen() {
-    const currentLeaderboardResponse =
-      await LeaderBoardRepository.getCurrentLeaderboard();
+  public static async isGameOpen(): Promise<ApiResponseDTO<boolean>> {
+    try {
+      const response = await LeaderBoardRepository.isLeaderboardOpen();
 
-    if (!currentLeaderboardResponse.data) {
-      return true;
+      return {
+        code: 200,
+        message: "OK",
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        code: 500,
+        message: "Internal server error",
+      };
     }
-
-    return currentLeaderboardResponse.data.isGameOpen;
   }
 
   public static async getCurrentLeaderboardWins(): Promise<GetLeaderBoardWinsResponseDTO> {

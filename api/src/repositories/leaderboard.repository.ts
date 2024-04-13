@@ -36,6 +36,19 @@ class LeaderBoardRepository {
       { ...data, updatedAt: Date.now() }
     );
   }
+
+  public static async isLeaderboardOpen(): Promise<
+    RepositoryResponse<boolean>
+  > {
+    const currentLeaderboard = await LeaderBoardModel.findOne().sort({
+      createdAt: 1,
+    });
+    const isGameOpen = currentLeaderboard?.isGameOpen ?? false;
+
+    return {
+      data: isGameOpen,
+    };
+  }
 }
 
 export default LeaderBoardRepository;
