@@ -18,39 +18,26 @@ class YamsService {
   public static async getYamsResults(
     userEmail: string
   ): Promise<IGetYamsResultsResponseDTO> {
-    try {
-      const isGameOpenResponse =
-        await LeaderBoardRepository.isLeaderboardOpen();
+    const isGameOpenResponse = await LeaderBoardRepository.isLeaderboardOpen();
 
-      if (!isGameOpenResponse.data) {
-        return {
-          code: 403,
-          message: "Game is closed",
-        };
-      }
-
-      const userResponse = await UserRepository.findUserByEmail(userEmail);
-      if (
-        !userResponse.data ||
-        userResponse.data.attempts >= this.MAX_ATTEMPTS
-      ) {
-        return {
-          code: 403,
-          message: "No attempts left",
-        };
-      }
-
-      const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
-
-      return await this.handleGameResult(result, userResponse.data!);
-    } catch (error) {
-      console.error("YamsService.getYamsResults: ", error);
-
+    if (!isGameOpenResponse.data) {
       return {
-        code: 500,
-        message: "Internal server error",
+        code: 403,
+        message: "Game is closed",
       };
     }
+
+    const userResponse = await UserRepository.findUserByEmail(userEmail);
+    if (!userResponse.data || userResponse.data.attempts >= this.MAX_ATTEMPTS) {
+      return {
+        code: 403,
+        message: "No attempts left",
+      };
+    }
+
+    const result = this.getCombination(this.DICE_FACES, this.DICE_COUNT);
+
+    return await this.handleGameResult(result, userResponse.data!);
   }
 
   private static getCombination(faces: number, dicesCount: number): YamsResult {

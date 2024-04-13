@@ -11,20 +11,13 @@ import PastriesRepository from "../repositories/pastries.repository";
 
 class PastriesService {
   public static async getAllPastries(): Promise<IGetAllPastriesResponseDTO> {
-    try {
-      const response = await PastriesRepository.getAllPastries();
+    const response = await PastriesRepository.getAllPastries();
 
-      return {
-        code: 200,
-        message: "Ok",
-        data: response.data!,
-      };
-    } catch (error) {
-      return {
-        code: 500,
-        message: "Internal server error",
-      };
-    }
+    return {
+      code: 200,
+      message: "Ok",
+      data: response.data!,
+    };
   }
 
   public static async getWinnerPastriesFor(

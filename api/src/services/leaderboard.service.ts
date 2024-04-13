@@ -32,49 +32,31 @@ class LeaderBoardService {
   }
 
   public static async isGameOpen(): Promise<ApiResponseDTO<boolean>> {
-    try {
-      const response = await LeaderBoardRepository.isLeaderboardOpen();
+    const response = await LeaderBoardRepository.isLeaderboardOpen();
 
-      return {
-        code: 200,
-        message: "OK",
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        code: 500,
-        message: "Internal server error",
-      };
-    }
+    return {
+      code: 200,
+      message: "OK",
+      data: response.data,
+    };
   }
 
   public static async getCurrentLeaderboardWins(): Promise<GetLeaderBoardWinsResponseDTO> {
-    try {
-      const currentLeaderboardResponse =
-        await LeaderBoardRepository.getCurrentLeaderboard();
+    const currentLeaderboardResponse =
+      await LeaderBoardRepository.getCurrentLeaderboard();
 
-      if (!currentLeaderboardResponse.data) {
-        return {
-          code: 404,
-          message: "No leaderboard found",
-        };
-      }
-
-      console.log(currentLeaderboardResponse.data);
-
+    if (!currentLeaderboardResponse.data) {
       return {
-        code: 200,
-        message: "OK",
-        data: currentLeaderboardResponse.data.wins,
-      };
-    } catch (error) {
-      console.error("LeaderBoardService.getCurrentLeaderboardWins: ", error);
-
-      return {
-        code: 500,
-        message: "Internal server error",
+        code: 404,
+        message: "No leaderboard found",
       };
     }
+
+    return {
+      code: 200,
+      message: "OK",
+      data: currentLeaderboardResponse.data.wins,
+    };
   }
 }
 
