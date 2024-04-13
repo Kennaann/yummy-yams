@@ -10,8 +10,9 @@ import UserService from "./user.service";
 import LeaderBoardService from "./leaderboard.service";
 
 class YamsService {
-  private static readonly DICE_FACES = 1;
+  private static readonly DICE_FACES = 4;
   private static readonly DICE_COUNT = 5;
+  private static readonly MAX_ATTEMPTS = 3;
 
   public static async getYamsResults(
     userEmail: string
@@ -26,7 +27,10 @@ class YamsService {
       }
 
       const userResponse = await UserRepository.findUserByEmail(userEmail);
-      if (!userResponse.data || userResponse.data.attempts === 0) {
+      if (
+        !userResponse.data ||
+        userResponse.data.attempts >= this.MAX_ATTEMPTS
+      ) {
         return {
           code: 403,
           message: "No attempts left",
@@ -76,9 +80,9 @@ class YamsService {
     result: YamsResult,
     user: IUser
   ): Promise<IGetYamsResultsResponseDTO> {
-    await UserService.handleUserAttempt(user);
-
     if (result.combination === "NOTHING") {
+      await UserService.updateUserAttempts(user, 1);
+
       return {
         code: 200,
         message: "OK",
@@ -100,6 +104,8 @@ class YamsService {
         message: "No pastries left in stock",
       };
     }
+
+    await UserService.updateUserAttempts(user, this.MAX_ATTEMPTS);
     await LeaderBoardService.updateLeaderBoard(user, pastryModels);
 
     const pastries = PastriesService.getSerializedPastries(pastryModels);

@@ -41,7 +41,7 @@ export const UserSchema = new Schema({
   },
   attempts: {
     type: Number,
-    default: 3,
+    default: 0,
     max: 3,
     min: 0,
   },
