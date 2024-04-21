@@ -25,7 +25,7 @@ export const PastriesList = () => {
                 alt={pastry.name}
                 height="100px"
               />
-              <p>{pastry.name}</p>
+              <p className="font-sans">{pastry.name}</p>
             </li>
           ))}
         </ul>

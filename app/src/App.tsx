@@ -1,10 +1,10 @@
-import { PastriesList } from "./features/pastries/PastriesList"
+import { HomepageLayout } from "./layouts/HomepageLayout"
 
 const App = () => {
   return (
-    <div>
-      <PastriesList />
-    </div>
+    <>
+      <HomepageLayout />
+    </>
   )
 }
 
