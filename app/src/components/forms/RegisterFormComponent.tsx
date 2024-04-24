@@ -5,7 +5,7 @@ import { Button } from "../core/ButtonComponent"
 import { AuthInput } from "./AuthInputComponent"
 import { useAppDispatch } from "../../app/hooks"
 import { registerUser } from "../../features/userSlice"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export const RegisterForm = () => {
   const dispatch = useAppDispatch()
@@ -60,16 +60,24 @@ export const RegisterForm = () => {
         errors={errors}
         onChange={e => onInputChange(e, "email")}
       />
-      <AuthInput
-        type="password"
-        name="password"
-        placeholder="Mot de passe"
-        value={registerData.password}
-        errors={errors}
-        onChange={e => onInputChange(e, "password")}
-      />
+      <div className="w-full">
+        <AuthInput
+          type="password"
+          name="password"
+          placeholder="Mot de passe"
+          value={registerData.password}
+          errors={errors}
+          onChange={e => onInputChange(e, "password")}
+        />
+        <p className="text-sm mt-2 text-slate-600">
+          Déjà inscrit ?
+          <Link to="/connexion">
+            <span className="underline text-pink-400 p-2">Se connecter</span>
+          </Link>
+        </p>
+      </div>
 
-      <Button type="primary" label="Se connecter" onClick={onSubmit} />
+      <Button type="primary" label="S'inscrire'" onClick={onSubmit} />
     </form>
   )
 }

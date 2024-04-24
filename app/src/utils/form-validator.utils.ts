@@ -25,12 +25,6 @@ export const validateLoginForm = (
 ): AuthFormState<LoginUserData> => {
   const errors: AuthErrors<LoginUserData> = {}
 
-  if (!isValidInput(data.email, EMAIL_REGEX)) {
-    errors.email = ERROR_MESSAGES.email.invalid
-  }
-  if (!isValidInput(data.password, PASSWORD_REGEX)) {
-    errors.password = ERROR_MESSAGES.password.invalid
-  }
   if (!data.email) errors.email = ERROR_MESSAGES.email.required
   if (!data.password) errors.password = ERROR_MESSAGES.password.required
 

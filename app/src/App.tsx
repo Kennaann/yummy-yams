@@ -8,8 +8,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<AuthPage Form={LoginForm} />} />
-        <Route path="/register" element={<AuthPage Form={RegisterForm} />} />
+        <Route path="/connexion" element={<AuthPage Form={LoginForm} />} />
+        <Route path="/inscription" element={<AuthPage Form={RegisterForm} />} />
         <Route path="/yams" element={<div>Yams</div>} />
         <Route path="/leaderboard" element={<div>Leaderboard</div>} />
         <Route path="/" element={<Homepage />} />

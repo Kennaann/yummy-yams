@@ -3,8 +3,13 @@ import { AuthErrors, LoginUserData } from "../../types/auht.types"
 import { validateLoginForm } from "../../utils/form-validator.utils"
 import { Button } from "../core/ButtonComponent"
 import { AuthInput } from "./AuthInputComponent"
+import { Link, useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../../app/hooks"
+import { loginUser } from "../../features/userSlice"
 
 export const LoginForm = () => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [loginData, setLoginData] = useState<LoginUserData>({
     email: "",
     password: "",
@@ -26,8 +31,8 @@ export const LoginForm = () => {
       return setErrors(errors)
     }
 
-    // Call API to login user
-    console.log(loginData)
+    dispatch(loginUser(loginData))
+    navigate("/")
   }
 
   return (
@@ -40,14 +45,22 @@ export const LoginForm = () => {
         errors={errors}
         onChange={e => onInputChange(e, "email")}
       />
-      <AuthInput
-        type="password"
-        name="password"
-        placeholder="Mot de passe"
-        value={loginData.password}
-        errors={errors}
-        onChange={e => onInputChange(e, "password")}
-      />
+      <div className="w-full">
+        <AuthInput
+          type="password"
+          name="password"
+          placeholder="Mot de passe"
+          value={loginData.password}
+          errors={errors}
+          onChange={e => onInputChange(e, "password")}
+        />
+        <p className="text-sm mt-2 text-slate-600">
+          Pas encore inscrit ?
+          <Link to="/inscription">
+            <span className="underline text-pink-400 p-2">Créer un compte</span>
+          </Link>
+        </p>
+      </div>
 
       <Button type="primary" label="Se connecter" onClick={onSubmit} />
     </form>

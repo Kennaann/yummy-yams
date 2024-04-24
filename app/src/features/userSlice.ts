@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "../app/store"
 import { post } from "../utils/api.utils"
-import { RegisterUserData, User } from "../types/auht.types"
+import { LoginUserData, RegisterUserData, User } from "../types/auht.types"
 import { setToken } from "../utils/jwt.utils"
 
 export interface UserState {
@@ -32,6 +32,19 @@ export const registerUser = createAsyncThunk(
   },
 )
 
+export const loginUser = createAsyncThunk(
+  "user/login",
+  async (data: LoginUserData) => {
+    const { token, ...user } = await post<User, LoginUserData>(
+      "/auth/login",
+      data,
+    )
+    setToken(token)
+
+    return user
+  },
+)
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -40,9 +53,19 @@ export const userSlice = createSlice({
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = "succeeded"
+        state.error = undefined
         state.data = action.payload
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.status = "failed"
+        state.error = action.error.message
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = "succeeded"
+        state.error = undefined
+        state.data = action.payload
+      })
+      .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed"
         state.error = action.error.message
       })
