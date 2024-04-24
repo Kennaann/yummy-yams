@@ -1,5 +1,6 @@
 import {
   AuthErrors,
+  AuthFormState,
   LoginUserData,
   RegisterUserData,
 } from "../types/auht.types"
@@ -21,7 +22,7 @@ const ERROR_MESSAGES = {
 
 export const validateLoginForm = (
   data: LoginUserData,
-): AuthErrors<LoginUserData> => {
+): AuthFormState<LoginUserData> => {
   const errors: AuthErrors<LoginUserData> = {}
 
   if (!isValidInput(data.email, EMAIL_REGEX)) {
@@ -33,12 +34,12 @@ export const validateLoginForm = (
   if (!data.email) errors.email = ERROR_MESSAGES.email.required
   if (!data.password) errors.password = ERROR_MESSAGES.password.required
 
-  return errors
+  return { errors, isValid: isFormValid(errors) }
 }
 
 export const validateRegisterForm = (
   data: RegisterUserData,
-): AuthErrors<RegisterUserData> => {
+): AuthFormState<RegisterUserData> => {
   const errors: AuthErrors<RegisterUserData> = {}
 
   if (!isValidInput(data.email, EMAIL_REGEX)) {
@@ -52,7 +53,11 @@ export const validateRegisterForm = (
   if (!data.firstname) errors.firstname = "Le prénom est requis"
   if (!data.lastname) errors.lastname = "Le nom est requis"
 
-  return errors
+  return { errors, isValid: isFormValid(errors) }
+}
+
+const isFormValid = <T>(errors: AuthErrors<T>): boolean => {
+  return Object.keys(errors).filter(Boolean).length <= 0
 }
 
 const isValidInput = (input: string, pattern: RegExp): boolean => {

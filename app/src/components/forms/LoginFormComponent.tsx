@@ -2,54 +2,52 @@ import { useState } from "react"
 import { AuthErrors, LoginUserData } from "../../types/auht.types"
 import { validateLoginForm } from "../../utils/form-validator.utils"
 import { Button } from "../ButtonComponent"
+import { AuthInput } from "./AuthInputComponent"
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [loginData, setLoginData] = useState<LoginUserData>({
+    email: "",
+    password: "",
+  })
   const [errors, setErrors] = useState<AuthErrors<LoginUserData>>({})
 
-  const onEmailChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-    if (errors.email) setErrors({ ...errors, email: undefined })
-  }
-
-  const onPasswordChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value)
-    if (errors.password) setErrors({ ...errors, password: undefined })
+  const onInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: keyof LoginUserData,
+  ) => {
+    setLoginData({ ...loginData, [name]: e.target.value })
+    if (errors[name]) setErrors({ ...errors, [name]: undefined })
   }
 
   const onSubmit = () => {
-    const errors = validateLoginForm({ email, password })
-    setErrors(errors)
+    const { isValid, errors } = validateLoginForm(loginData)
+
+    if (!isValid) {
+      return setErrors(errors)
+    }
+
+    // Call API to login user
+    console.log(loginData)
   }
 
   return (
     <form className="flex flex-col items-center mt-6 px-4 md:px-0 w-full max-w-96">
-      <div className="w-full">
-        <input
-          type="email"
-          className="w-full py-2 px-4 rounded-lg bg-slate-200 focus:outline-slate-300"
-          placeholder="Adresse email"
-          value={email}
-          onChange={onEmailChanged}
-        />
-        {errors.email && (
-          <p className="text-sm text-red-500 pt-2">{errors.email}</p>
-        )}
-      </div>
-
-      <div className="w-full">
-        <input
-          type="password"
-          className="w-full py-2 px-4 rounded-lg bg-slate-200 mt-4 focus:outline-slate-300"
-          placeholder="Mot de passe"
-          value={password}
-          onChange={onPasswordChanged}
-        />
-        {errors.password && (
-          <p className="text-sm text-red-500 pt-2">{errors.password}</p>
-        )}
-      </div>
+      <AuthInput
+        type="emal"
+        name="email"
+        placeholder="Adresse email"
+        value={loginData.email}
+        errors={errors}
+        onChange={e => onInputChange(e, "email")}
+      />
+      <AuthInput
+        type="password"
+        name="password"
+        placeholder="Mot de passe"
+        value={loginData.password}
+        errors={errors}
+        onChange={e => onInputChange(e, "password")}
+      />
 
       <Button type="primary" label="Se connecter" onClick={onSubmit} />
     </form>
