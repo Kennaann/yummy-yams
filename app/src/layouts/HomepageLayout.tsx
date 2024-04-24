@@ -4,11 +4,7 @@ import { HeroComponent } from "../components/HeroComponent"
 export const HomepageLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 static">
-      <HeroComponent
-        title="Lancer c'est gagner ! (ou pas)"
-        subtitle="Lancez les dés et tentez de gagner jusqu'à 3 pâtisseries !"
-        ctaLabel="Jouer maintenant"
-      />
+      <HeroComponent />
 
       <ContentComponent
         title="La première boulangerie gérée par une IA"

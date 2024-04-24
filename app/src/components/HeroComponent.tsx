@@ -1,16 +1,49 @@
+import { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { getIsGameOpen, selectIsGameOpen } from "../features/gameSlice"
+import { ButtonComponent } from "./ButtonComponent"
 import { LogoComponent } from "./LogoComponent"
 
-interface HeroComponentProps {
+interface HeroContent {
   title: string
   subtitle: string
   ctaLabel: string
 }
 
-export const HeroComponent = ({
-  title,
-  subtitle,
-  ctaLabel,
-}: HeroComponentProps) => {
+const HERO_CONTENT: Record<string, HeroContent> = {
+  OPEN: {
+    title: "Lancer c'est gagner ! (ou pas)",
+    subtitle: "Lancez les dés et tentez de gagner jusqu'à 3 pâtisseries !",
+    ctaLabel: "Jouer maintenant",
+  },
+  CLOSED: {
+    title: "Les résultats sont là !",
+    subtitle: "Découvrez les gagnants de la dernière partie",
+    ctaLabel: "Voir les résultats",
+  },
+}
+
+export const HeroComponent = () => {
+  const dispatch = useAppDispatch()
+
+  const isGameOpen = useAppSelector(selectIsGameOpen)
+  const gameStatus = useAppSelector(state => state.game.status)
+
+  useEffect(() => {
+    if (gameStatus === "idle") {
+      dispatch(getIsGameOpen())
+    }
+  }, [gameStatus, dispatch])
+
+  const getHeroContent = (): HeroContent => {
+    if (gameStatus !== "succeeded" || isGameOpen) {
+      return HERO_CONTENT.OPEN
+    }
+
+    return HERO_CONTENT.CLOSED
+  }
+  const { title, subtitle, ctaLabel } = getHeroContent()
+
   return (
     <>
       <img
@@ -30,9 +63,7 @@ export const HeroComponent = ({
               {subtitle}
             </p>
 
-            <button className="font-semibold bg-pink-400 py-2 px-4 rounded-tl-lg rounded-tr-lg rounded-br-lg my-4 md:mt-6 sm:w-fit ">
-              {ctaLabel}
-            </button>
+            <ButtonComponent type="primary" label={ctaLabel} />
           </div>
         </div>
       </div>
