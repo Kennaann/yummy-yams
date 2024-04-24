@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "../app/store"
-import { get } from "../utils/api.util"
-import { Game } from "../types/game.type"
+import { get } from "../utils/api.utils"
+import { Game } from "../types/game.types"
 
 export interface GameState {
   status: "idle" | "loading" | "succeeded" | "failed"

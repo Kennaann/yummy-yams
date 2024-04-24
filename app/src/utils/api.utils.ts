@@ -3,7 +3,7 @@ import axios, {
   AxiosRequestConfig,
   RawAxiosRequestHeaders,
 } from "axios"
-import { APIResponse } from "../types/api.type"
+import { APIResponse } from "../types/api.types"
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,

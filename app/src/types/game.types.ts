@@ -1,4 +1,4 @@
-import { Pastry } from "./pastry.type"
+import { Pastry } from "./pastry.types"
 
 export type YamsResult = {
   combination: "YAMS" | "SQUARE" | "DOUBLE" | "NOTHING"

@@ -1,6 +1,6 @@
-import { ButtonComponent } from "./ButtonComponent"
+import { Button } from "../components/ButtonComponent"
 
-interface ContentComponentProps {
+interface ContentLayoutProps {
   title: string
   text: string
   image: string
@@ -8,13 +8,13 @@ interface ContentComponentProps {
   isInverted: boolean
 }
 
-export const ContentComponent = ({
+export const ContentLayout = ({
   title,
   text,
   image,
   ctaLabel,
   isInverted,
-}: ContentComponentProps) => {
+}: ContentLayoutProps) => {
   const flexDirection = isInverted ? "flex-row-reverse" : "flex-row"
   const margin = isInverted ? "mr-4 md:mr-8" : "ml-4 md:ml-8"
 
@@ -26,7 +26,7 @@ export const ContentComponent = ({
         <h2 className="text-2xl font-semibold">{title}</h2>
         <p className="mt-2">{text}</p>
 
-        <ButtonComponent type="secondary" label={ctaLabel} />
+        <Button type="secondary" label={ctaLabel} />
       </div>
 
       <img
