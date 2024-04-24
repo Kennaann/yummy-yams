@@ -12,11 +12,23 @@ const client = axios.create({
 export const get = async <T>(endpoint: string) => {
   try {
     const response: AxiosResponse<APIResponse<T>> = await client.get(endpoint)
-    const pastries: T = response.data.data!
 
-    return pastries
+    return response.data.data!
   } catch (err) {
     console.log(err)
     throw new Error("Failed to fetch")
+  }
+}
+
+export const post = async <T, D>(endpoint: string, data: D) => {
+  try {
+    const response: AxiosResponse<APIResponse<T>> = await client.post(
+      endpoint,
+      data,
+    )
+    return response.data.data!
+  } catch (err) {
+    console.log(err)
+    throw new Error("Failed to post")
   }
 }

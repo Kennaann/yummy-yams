@@ -39,10 +39,8 @@ export const HeroLayout = () => {
   const gameStatus = useAppSelector(state => state.game.status)
 
   useEffect(() => {
-    if (gameStatus === "idle") {
-      dispatch(getIsGameOpen())
-    }
-  }, [gameStatus, dispatch])
+    dispatch(getIsGameOpen())
+  }, [dispatch])
 
   const getHeroContent = (): HeroContent => {
     if (gameStatus !== "succeeded" || isGameOpen) {

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "../app/store"
 import { get } from "../utils/api.utils"
 import { Game } from "../types/game.types"
@@ -6,12 +6,12 @@ import { Game } from "../types/game.types"
 export interface GameState {
   status: "idle" | "loading" | "succeeded" | "failed"
   error?: string
-  game: Game
+  data: Game
 }
 
 const initialState: GameState = {
   status: "idle",
-  game: {
+  data: {
     isOpen: false,
   },
 }
@@ -35,7 +35,7 @@ export const gameSlice = createSlice({
       })
       .addCase(getIsGameOpen.fulfilled, (state, action) => {
         state.status = "succeeded"
-        state.game.isOpen = action.payload
+        state.data.isOpen = action.payload
       })
       .addCase(getIsGameOpen.rejected, (state, action) => {
         state.status = "failed"
@@ -44,6 +44,6 @@ export const gameSlice = createSlice({
   },
 })
 
-export const selectIsGameOpen = (state: RootState) => state.game.game.isOpen
+export const selectIsGameOpen = (state: RootState) => state.game.data.isOpen
 
 export default gameSlice.reducer

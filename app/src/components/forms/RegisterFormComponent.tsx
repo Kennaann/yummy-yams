@@ -3,8 +3,13 @@ import { AuthErrors, RegisterUserData } from "../../types/auht.types"
 import { validateRegisterForm } from "../../utils/form-validator.utils"
 import { Button } from "../core/ButtonComponent"
 import { AuthInput } from "./AuthInputComponent"
+import { useAppDispatch } from "../../app/hooks"
+import { registerUser } from "../../features/userSlice"
+import { useNavigate } from "react-router-dom"
 
 export const RegisterForm = () => {
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [registerData, setRegisterData] = useState<RegisterUserData>({
     firstname: "",
     lastname: "",
@@ -25,8 +30,8 @@ export const RegisterForm = () => {
     const { isValid, errors } = validateRegisterForm(registerData)
     if (!isValid) return setErrors(errors)
 
-    // Call API to login user
-    console.log(registerData)
+    dispatch(registerUser(registerData))
+    navigate("/")
   }
 
   return (
