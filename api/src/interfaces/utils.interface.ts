@@ -13,5 +13,5 @@ export type ApiResponseDTO<T, E = undefined> = Promise<{
   code: number;
   message: string;
   data?: T;
-  errors?: E;
+  errors?: ValidationErrorsDTO<E>;
 }>;
