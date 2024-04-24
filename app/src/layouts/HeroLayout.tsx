@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { getIsGameOpen, selectIsGameOpen } from "../features/gameSlice"
-import { Button } from "../components/ButtonComponent"
-import { Logo } from "../components/LogoComponent"
+import { Button } from "../components/core/ButtonComponent"
+import { Logo } from "../components/core/LogoComponent"
 
 interface HeroContent {
   title: string

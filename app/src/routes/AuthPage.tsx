@@ -1,4 +1,4 @@
-import { Logo } from "../components/LogoComponent"
+import { Logo } from "../components/core/LogoComponent"
 
 interface AuthPageProps {
   Form: React.FC

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { AuthErrors, RegisterUserData } from "../../types/auht.types"
 import { validateRegisterForm } from "../../utils/form-validator.utils"
-import { Button } from "../ButtonComponent"
+import { Button } from "../core/ButtonComponent"
 import { AuthInput } from "./AuthInputComponent"
 
 export const RegisterForm = () => {
