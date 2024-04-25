@@ -24,14 +24,14 @@ export const LoginForm = () => {
     if (errors[name]) setErrors({ ...errors, [name]: undefined })
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const { isValid, errors } = validateLoginForm(loginData)
 
     if (!isValid) {
       return setErrors(errors)
     }
 
-    dispatch(loginUser(loginData))
+    await dispatch(loginUser(loginData))
     navigate("/")
   }
 

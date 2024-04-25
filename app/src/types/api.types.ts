@@ -1,5 +1,8 @@
 export interface APIResponse<T> {
   message: string
   data?: T
-  error?: string
+  error?: {
+    code: number
+    message: string
+  }
 }

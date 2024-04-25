@@ -23,7 +23,7 @@ class YamsController {
     if (!isGameOpenResponse.data) {
       return {
         code: 403,
-        message: "Game is closed",
+        message: "CLOSED_GAME",
       };
     }
 
@@ -31,7 +31,7 @@ class YamsController {
     if (!userResponse.data || userResponse.data.attempts >= this.MAX_ATTEMPTS) {
       return {
         code: 403,
-        message: "No attempts left",
+        message: "NO_ATTEMPS_LEFT",
       };
     }
 

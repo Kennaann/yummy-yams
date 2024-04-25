@@ -26,11 +26,11 @@ export const RegisterForm = () => {
     if (errors[name]) setErrors({ ...errors, [name]: undefined })
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const { isValid, errors } = validateRegisterForm(registerData)
     if (!isValid) return setErrors(errors)
 
-    dispatch(registerUser(registerData))
+    await dispatch(registerUser(registerData))
     navigate("/")
   }
 

@@ -1,22 +1,22 @@
-import axios, {
-  AxiosResponse,
-  AxiosRequestConfig,
-  RawAxiosRequestHeaders,
-} from "axios"
+import axios, { AxiosResponse, AxiosError } from "axios"
 import { APIResponse } from "../types/api.types"
+import { getToken } from "./jwt.utils"
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${getToken() ?? ""}`,
+  },
 })
 
 export const get = async <T>(endpoint: string) => {
   try {
     const response: AxiosResponse<APIResponse<T>> = await client.get(endpoint)
 
-    return response.data.data!
+    return response.data
   } catch (err) {
-    console.log(err)
-    throw new Error("Failed to fetch")
+    return handleApiError(err)
   }
 }
 
@@ -30,5 +30,25 @@ export const post = async <T, D>(endpoint: string, data: D) => {
   } catch (err) {
     console.log(err)
     throw new Error("Failed to post")
+  }
+}
+
+const handleApiError = (error: unknown): APIResponse<never> => {
+  if (error instanceof AxiosError) {
+    return {
+      message: "Failed to fetch",
+      error: {
+        code: error.response?.status!,
+        message: error.response?.data.message!,
+      },
+    }
+  }
+
+  return {
+    message: "Failed to fetch",
+    error: {
+      code: 500,
+      message: "Internal server error",
+    },
   }
 }

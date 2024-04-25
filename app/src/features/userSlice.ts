@@ -6,17 +6,15 @@ import { setToken } from "../utils/jwt.utils"
 
 export interface UserState {
   status: "idle" | "loading" | "succeeded" | "failed"
-  error?: string
-  data: Omit<User, "token">
+  error?: {
+    code: number
+    message: string
+  }
+  data?: Omit<User, "token">
 }
 
 const initialState: UserState = {
   status: "idle",
-  data: {
-    email: "",
-    username: "",
-    role: "user",
-  },
 }
 
 export const registerUser = createAsyncThunk(
@@ -48,7 +46,13 @@ export const loginUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    removeUser: state => {
+      state.status = "idle"
+      state.error = undefined
+      state.data = undefined
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
@@ -58,7 +62,7 @@ export const userSlice = createSlice({
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed"
-        state.error = action.error.message
+        state.error = action.payload as UserState["error"]
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.status = "succeeded"
@@ -67,11 +71,12 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed"
-        state.error = action.error.message
+        state.error = action.payload as UserState["error"]
       })
   },
 })
 
+export const { removeUser } = userSlice.actions
 export const selectUser = (state: RootState) => state.user.data
 
 export default userSlice.reducer
