@@ -52,6 +52,7 @@ export const gameSlice = createSlice({
       state.data = {
         isOpen: false,
       }
+      state.error = undefined
     },
   },
   extraReducers(builder) {

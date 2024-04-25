@@ -17,7 +17,6 @@ import {
 } from "../types/game.types"
 import { Logo } from "../components/core/LogoComponent"
 import { Dice } from "../components/game/Dice"
-import { shuffle } from "../utils/game.utils"
 
 export const YamsPage = () => {
   const dispatch = useAppDispatch()
@@ -26,7 +25,7 @@ export const YamsPage = () => {
   const user = useAppSelector(selectUser)
   const [errorMessage, setErrorMessage] = useState("")
   const [redirect, setRedirect] = useState({ to: "", label: "" })
-  const [numberIndexes, setNumberIndexes] = useState<number[]>([])
+  const [numberIndexes, setNumberIndexes] = useState<number[]>([1, 3, 2, 0, 4])
   const [prizeStatus, setPrizeStatus] = useState<PrizeStatus>({
     message: "",
   })
@@ -40,8 +39,11 @@ export const YamsPage = () => {
     if (throwData) {
       return handleGameResult(throwData.result)
     }
-    setNumberIndexes(shuffle([0, 1, 2, 3, 4]))
-  }, [throwData])
+
+    if (error) {
+      return handleErrors(error)
+    }
+  }, [throwData, error])
 
   const handleErrors = (error: GameState["error"]) => {
     if (error!.code !== 403) {
@@ -58,7 +60,7 @@ export const YamsPage = () => {
       dispatch(removeUser())
       dispatch(resetGame())
       setErrorMessage(ErrorResponseToMessageMap.INVALID_TOKEN)
-      setRedirect({ to: "/connexion", label: "page de connexion" })
+      setRedirect({ to: "/connexion", label: "connexion" })
       setTimeout(() => navigate("/connexion"), 5000)
       return
     }
@@ -98,11 +100,10 @@ export const YamsPage = () => {
   }
 
   const getResults = async () => {
-    await dispatch(getYamsResults())
     if (error) {
-      handleErrors(error)
-      return
+      return handleErrors(error)
     }
+    await dispatch(getYamsResults())
   }
 
   return (
@@ -110,7 +111,7 @@ export const YamsPage = () => {
       <Logo />
 
       {errorMessage && (
-        <p>
+        <p className=" mt-4 py-6 text-center bg-red-200 rounded-lg font-semibold z-20">
           {errorMessage}
           <Link to={redirect.to}>
             <span className="underline text-pink-400 p-2">
@@ -120,15 +121,15 @@ export const YamsPage = () => {
         </p>
       )}
 
-      <div className="flex flex-col items-center justify-center h-screen absolute inset-0">
+      <div className="flex flex-col items-center justify-center mt-56">
         {prizeStatus.message && (
           <div className="mb-20">
-            <h2 className="text-3xl text-slate-800 font-semibold text-center mb-12">
+            <h2 className="text-3xl text-slate-800 font-semibold text-center ">
               {prizeStatus.message}
             </h2>
 
             {prizeStatus.prize ? (
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center mt-12">
                 <div className="flex gap-3 md:gap-4 mb-2">
                   {prizeStatus.prize?.map(pastry => (
                     <img
@@ -146,7 +147,7 @@ export const YamsPage = () => {
                 />
               </div>
             ) : (
-              <p className="text-center">
+              <p className="text-center mt-4">
                 {throwData?.attempts} essais restants
               </p>
             )}
@@ -162,7 +163,12 @@ export const YamsPage = () => {
         </div>
 
         {!prizeStatus.prize && (
-          <Button type="primary" label="Lancer" onClick={getResults} />
+          <Button
+            type="primary"
+            label="Lancer"
+            onClick={getResults}
+            disabled={!!error}
+          />
         )}
       </div>
     </>
