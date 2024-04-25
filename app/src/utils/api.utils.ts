@@ -4,15 +4,13 @@ import { getToken } from "./jwt.utils"
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${getToken() ?? ""}`,
-  },
 })
 
 export const get = async <T>(endpoint: string) => {
   try {
-    const response: AxiosResponse<APIResponse<T>> = await client.get(endpoint)
+    const response: AxiosResponse<APIResponse<T>> = await client.get(endpoint, {
+      headers: { Authorization: `Bearer ${getToken() ?? ""}` },
+    })
 
     return response.data
   } catch (err) {
@@ -25,11 +23,11 @@ export const post = async <T, D>(endpoint: string, data: D) => {
     const response: AxiosResponse<APIResponse<T>> = await client.post(
       endpoint,
       data,
+      { headers: { Authorization: `Bearer ${getToken() ?? ""}` } },
     )
     return response.data.data!
   } catch (err) {
-    console.log(err)
-    throw new Error("Failed to post")
+    handleApiError(err)
   }
 }
 

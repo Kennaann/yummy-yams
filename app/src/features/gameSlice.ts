@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "../app/store"
 import { get } from "../utils/api.utils"
-import { Game, YamsResult } from "../types/game.types"
+import { Game, YamsThrow } from "../types/game.types"
 
 export interface GameState {
   status: "idle" | "loading" | "succeeded" | "failed"
@@ -34,7 +34,7 @@ export const getIsGameOpen = createAsyncThunk(
 export const getYamsResults = createAsyncThunk(
   "game/getYamsResults",
   async (_, { rejectWithValue }) => {
-    const response = await get<YamsResult>("/yams")
+    const response = await get<YamsThrow>("/yams")
 
     if (response.error) {
       return rejectWithValue(response.error)
@@ -46,7 +46,14 @@ export const getYamsResults = createAsyncThunk(
 export const gameSlice = createSlice({
   name: "game",
   initialState,
-  reducers: {},
+  reducers: {
+    resetGame: state => {
+      state.status = "idle"
+      state.data = {
+        isOpen: false,
+      }
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getIsGameOpen.fulfilled, (state, action) => {
@@ -58,7 +65,7 @@ export const gameSlice = createSlice({
       })
       .addCase(getYamsResults.fulfilled, (state, action) => {
         state.status = "succeeded"
-        state.data.result = action.payload
+        state.data.throw = action.payload
         state.error = undefined
       })
       .addCase(getYamsResults.rejected, (state, action) => {
@@ -68,7 +75,8 @@ export const gameSlice = createSlice({
   },
 })
 
+export const { resetGame } = gameSlice.actions
 export const selectIsGameOpen = (state: RootState) => state.game.data.isOpen
-export const selectYamsResult = (state: RootState) => state.game.data.result
+export const getYamsThrow = (state: RootState) => state.game.data.throw
 
 export default gameSlice.reducer
