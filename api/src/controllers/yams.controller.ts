@@ -52,7 +52,7 @@ class YamsController {
         message: "OK",
         data: {
           result,
-          attempts: this.MAX_ATTEMPTS - user.attempts + 1,
+          attempts: this.MAX_ATTEMPTS - (user.attempts + 1),
         },
       };
     }
