@@ -37,16 +37,20 @@ export const HeroLayout = () => {
 
   const isGameOpen = useAppSelector(selectIsGameOpen)
   const gameStatus = useAppSelector(state => state.game.status)
-  const [content, setContent] = useState<HeroContent>(HERO_CONTENT.OPEN)
+  const [content, setContent] = useState<HeroContent>(HERO_CONTENT.CLOSED)
 
   useEffect(() => {
-    if (gameStatus === "idle") {
-      dispatch(getIsGameOpen())
+    const getContent = async () => {
+      await dispatch(getIsGameOpen())
+
+      if (!isGameOpen) {
+        return setContent(HERO_CONTENT.CLOSED)
+      }
+
+      return setContent(HERO_CONTENT.OPEN)
     }
 
-    if (!isGameOpen) {
-      setContent(HERO_CONTENT.CLOSED)
-    }
+    getContent()
   }, [dispatch, isGameOpen, gameStatus])
 
   return (
