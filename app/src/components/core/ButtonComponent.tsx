@@ -29,7 +29,7 @@ export const Button = ({
   return (
     <Link to={href}>
       <button
-        className={`font-semibold text-slate-50 ${color} py-2 px-4 rounded-tl-lg rounded-tr-lg rounded-br-lg mt-6 sm:w-fit`}
+        className={`font-semibold text-slate-50 ${color} py-2 px-4 rounded-tr-lg rounded-bl-lg rounded-br-lg mt-6 sm:w-fit`}
         onClick={onClick}
       >
         {label}

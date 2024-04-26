@@ -63,7 +63,7 @@ export const HeroLayout = () => {
       <div className="absolute inset-0 md:h-[500px] bg-black opacity-35 z-10"></div>
 
       <div className="z-20 px-2 text-slate-50">
-        <div className="min-h-screen md:h-[500px] flex flex-col justify-between md:justify-normal md:items-center md:gap-20 md:absolute md:inset-0">
+        <div className="h-screen md:h-[500px] flex flex-col justify-between md:justify-normal md:items-center md:gap-20 md:absolute md:inset-0">
           <Logo />
 
           <div className="m-5 flex flex-col md:items-center">
