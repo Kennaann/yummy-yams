@@ -53,18 +53,18 @@ export const ResultsTable = () => {
             >
               <th
                 scope="row"
-                className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap"
+                className="p-4 md:px-6 font-medium text-slate-900 whitespace-nowrap"
               >
                 {winner.username}
               </th>
-              <td className="px-6 py-4">
+              <td className="p-4">
                 <ul className="space-y-2">
                   {prize.map(pastry => (
                     <li key={pastry._id}>{pastry.name}</li>
                   ))}
                 </ul>
               </td>
-              <td className="px-6 py-4">{getLocalDateTime(createdAt)}</td>
+              <td className="p-4">{getLocalDateTime(createdAt)}</td>
             </tr>
           ))}
         </tbody>

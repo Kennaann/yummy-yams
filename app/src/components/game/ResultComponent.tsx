@@ -54,7 +54,7 @@ export const Result = () => {
           <div className="flex gap-3 md:gap-4 mb-2">
             {prizeStatus.prize?.map(pastry => (
               <img
-                key={pastry.id}
+                key={pastry._id}
                 src={`assets/${pastry.image}`}
                 alt={pastry.name}
                 className="w-28 md:h-40 h- md:w-40 rounded-md -translate-y-3 first:translate-y-0 last:translate-y-0 hover:translate-x-0 hover:translate-y-0  hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out"
