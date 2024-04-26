@@ -25,9 +25,9 @@ export const post = async <T, D>(endpoint: string, data: D) => {
       data,
       { headers: { Authorization: `Bearer ${getToken() ?? ""}` } },
     )
-    return response.data.data!
+    return response.data
   } catch (err) {
-    handleApiError(err)
+    return handleApiError(err)
   }
 }
 

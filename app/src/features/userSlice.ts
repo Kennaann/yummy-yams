@@ -19,11 +19,14 @@ const initialState: UserState = {
 
 export const registerUser = createAsyncThunk(
   "user/register",
-  async (data: RegisterUserData) => {
-    const { token, ...user } = await post<User, RegisterUserData>(
-      "/auth/register",
-      data,
-    )
+  async (data: RegisterUserData, { rejectWithValue }) => {
+    const response = await post<User, RegisterUserData>("/auth/register", data)
+
+    if (response.error) {
+      return rejectWithValue(response.error)
+    }
+
+    const { token, ...user } = response.data!
     setToken(token)
 
     return user
@@ -32,11 +35,13 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (data: LoginUserData) => {
-    const { token, ...user } = await post<User, LoginUserData>(
-      "/auth/login",
-      data,
-    )
+  async (data: LoginUserData, { rejectWithValue }) => {
+    const response = await post<User, LoginUserData>("/auth/login", data)
+    if (response.error) {
+      return rejectWithValue(response.error)
+    }
+
+    const { token, ...user } = response.data!
     setToken(token)
 
     return user
