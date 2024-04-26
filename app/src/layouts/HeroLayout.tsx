@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { getIsGameOpen, selectIsGameOpen } from "../features/gameSlice"
 import { Button } from "../components/core/ButtonComponent"
@@ -24,34 +24,30 @@ const HERO_CONTENT: Record<string, HeroContent> = {
   },
   CLOSED: {
     title: "Les résultats sont là !",
-    subtitle: "Découvrez les gagnants de la dernière partie",
+    subtitle: "Découvrez les gagnants du dernier évènement",
     button: {
       label: "Voir les résultats",
-      href: "/leaderboard",
+      href: "/resultats",
     },
   },
-}
+} as const
 
 export const HeroLayout = () => {
   const dispatch = useAppDispatch()
 
   const isGameOpen = useAppSelector(selectIsGameOpen)
   const gameStatus = useAppSelector(state => state.game.status)
+  const [content, setContent] = useState<HeroContent>(HERO_CONTENT.OPEN)
 
   useEffect(() => {
     if (gameStatus === "idle") {
       dispatch(getIsGameOpen())
     }
-  }, [gameStatus, dispatch])
 
-  const getHeroContent = (): HeroContent => {
-    if (gameStatus !== "succeeded" || isGameOpen) {
-      return HERO_CONTENT.OPEN
+    if (!isGameOpen) {
+      setContent(HERO_CONTENT.CLOSED)
     }
-
-    return HERO_CONTENT.CLOSED
-  }
-  const { title, subtitle, button } = getHeroContent()
+  }, [dispatch, isGameOpen, gameStatus])
 
   return (
     <>
@@ -67,12 +63,18 @@ export const HeroLayout = () => {
           <Logo />
 
           <div className="m-5 flex flex-col md:items-center">
-            <h2 className="text-2xl font-semibold md:hidden">{title}</h2>
+            <h2 className="text-2xl font-semibold md:hidden">
+              {content.title}
+            </h2>
             <p className="text-sm w-1/2 md:w-2/3 font-semibold md:text-center">
-              {subtitle}
+              {content.subtitle}
             </p>
 
-            <Button href={button.href} type="primary" label={button.label} />
+            <Button
+              href={content.button.href}
+              type="primary"
+              label={content.button.label}
+            />
           </div>
         </div>
       </div>

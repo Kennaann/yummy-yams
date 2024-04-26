@@ -5,6 +5,7 @@ import { LoginForm } from "./components/forms/LoginFormComponent"
 import { RegisterForm } from "./components/forms/RegisterFormComponent"
 import { YamsPage } from "./routes/YamsPage"
 import { LogoutPage } from "./routes/LogoutPage"
+import { ResultsPage } from "./routes/ResultsPage"
 
 const App = () => {
   return (
@@ -14,7 +15,7 @@ const App = () => {
         <Route path="/inscription" element={<AuthPage Form={RegisterForm} />} />
         <Route path="/deconnexion" element={<LogoutPage />} />
         <Route path="/yams" element={<YamsPage />} />
-        <Route path="/leaderboard" element={<div>Leaderboard</div>} />
+        <Route path="/resultats" element={<ResultsPage />} />
         <Route path="/" element={<Homepage />} />
       </Routes>
     </Router>

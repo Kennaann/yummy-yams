@@ -27,21 +27,28 @@ export const ErrorBanner = () => {
     const errorMessage =
       error?.message as keyof typeof ErrorResponseToMessageMap
 
-    if (errorMessage === "INVALID_TOKEN") {
-      setErrorMessage(ErrorResponseToMessageMap.INVALID_TOKEN)
-      setRedirect({ to: "/connexion", label: "connexion" })
+    switch (errorMessage) {
+      case "INVALID_TOKEN":
+        setRedirect({ to: "/connexion", label: "connexion" })
 
-      setTimeout(() => {
-        removeToken()
-        dispatch(removeUser())
-        dispatch(resetGame())
-        navigate("/connexion")
-      }, 5000)
-      return
+        setTimeout(() => {
+          removeToken()
+          dispatch(removeUser())
+          dispatch(resetGame())
+          navigate("/connexion")
+        }, 5000)
+        break
+      case "CLOSED_GAME":
+        setRedirect({ to: "/resultats", label: "voir les résultats" })
+        break
+      default:
+        setRedirect({ to: "/", label: "retour à la page d'accueil" })
     }
 
-    setErrorMessage(ErrorResponseToMessageMap[errorMessage])
-    setRedirect({ to: "/", label: "retour à la page d'accueil" })
+    setErrorMessage(
+      ErrorResponseToMessageMap[errorMessage] ??
+        ErrorResponseToMessageMap.DEFAULT,
+    )
   }
 
   return (
