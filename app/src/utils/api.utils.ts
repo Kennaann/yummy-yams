@@ -38,6 +38,7 @@ const handleApiError = (error: unknown): APIResponse<never> => {
       error: {
         code: error.response?.status!,
         message: error.response?.data.message!,
+        errors: error.response?.data.errors,
       },
     }
   }

@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { AuthErrors, RegisterUserData } from "../../types/auht.types"
+import { AuthErrors, RegisterUserData } from "../../types/auth.types"
 import { validateRegisterForm } from "../../utils/form-validator.utils"
 import { Button } from "../core/ButtonComponent"
 import { AuthInput } from "./AuthInputComponent"
 import { useAppDispatch } from "../../app/hooks"
-import { registerUser } from "../../features/userSlice"
+import { registerUser, removeAuthError } from "../../features/userSlice"
 import { Link, useNavigate } from "react-router-dom"
 
 export const RegisterForm = () => {
@@ -30,7 +30,16 @@ export const RegisterForm = () => {
     const { isValid, errors } = validateRegisterForm(registerData)
     if (!isValid) return setErrors(errors)
 
-    await dispatch(registerUser(registerData))
+    const response = await dispatch(registerUser(registerData))
+    // @ts-ignore
+    const error = !!response.error
+
+    if (error) {
+      return setTimeout(() => {
+        dispatch(removeAuthError())
+      }, 5000)
+    }
+
     navigate("/")
   }
 

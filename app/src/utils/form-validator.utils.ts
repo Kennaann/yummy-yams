@@ -3,7 +3,7 @@ import {
   AuthFormState,
   LoginUserData,
   RegisterUserData,
-} from "../types/auht.types"
+} from "../types/auth.types"
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/
 const PASSWORD_REGEX =

@@ -1,4 +1,4 @@
-import { User } from "./auht.types"
+import { User } from "./auth.types"
 import { Pastry } from "./pastry.types"
 
 export type Win = {

@@ -16,14 +16,14 @@ export const UserSchema = new Schema({
     required: true,
     unique: true,
     trim: true,
-    match: [EMAIL_REGEX, "invalid email"],
+    match: [EMAIL_REGEX, "INVALID_EMAIL"],
   },
 
   password: {
     type: String,
     required: true,
     trim: true,
-    match: [PASSWORD_REGEX, "invalid password"],
+    match: [PASSWORD_REGEX, "INVALID_PASSWORD"],
   },
   role: {
     type: String,
@@ -49,7 +49,7 @@ export const UserSchema = new Schema({
 UserSchema.path("email").validate(async function (value, _done) {
   const emailCount = await UserModel.countDocuments({ email: value });
   return !emailCount;
-}, "Email already exists");
+}, "EMAIL_ALREADY_EXISTS");
 
 UserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {

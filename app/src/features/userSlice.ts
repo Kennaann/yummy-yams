@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import type { RootState } from "../app/store"
 import { post } from "../utils/api.utils"
-import { LoginUserData, RegisterUserData, User } from "../types/auht.types"
+import {
+  AuthErrors,
+  LoginUserData,
+  RegisterUserData,
+  User,
+} from "../types/auth.types"
 import { setToken } from "../utils/jwt.utils"
 
 export interface UserState {
@@ -9,6 +14,7 @@ export interface UserState {
   error?: {
     code: number
     message: string
+    errors?: AuthErrors<RegisterUserData>
   }
   data?: Omit<User, "token">
 }
@@ -57,6 +63,10 @@ export const userSlice = createSlice({
       state.error = undefined
       state.data = undefined
     },
+    removeAuthError: state => {
+      state.status = "idle"
+      state.error = undefined
+    },
   },
   extraReducers(builder) {
     builder
@@ -75,13 +85,16 @@ export const userSlice = createSlice({
         state.data = action.payload
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.status = "failed"
-        state.error = action.payload as UserState["error"]
+        return {
+          status: "failed",
+          error: action.payload as UserState["error"],
+          data: undefined,
+        }
       })
   },
 })
 
-export const { removeUser } = userSlice.actions
+export const { removeUser, removeAuthError } = userSlice.actions
 export const selectUser = (state: RootState) => state.user.data
 
 export default userSlice.reducer
