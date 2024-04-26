@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
 import { GameState, resetGame } from "../../features/gameSlice"
 import { useEffect, useState } from "react"
-import { ErrorResponseToMessageMap } from "../../types/game.types"
+import { ErrorResponseToMessageMap } from "../../utils/game.utils"
 import { removeToken } from "../../utils/jwt.utils"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { removeUser } from "../../features/userSlice"
@@ -18,18 +18,12 @@ export const ErrorBanner = () => {
   }, [error])
 
   const handleErrors = (error: GameState["error"]) => {
-    if (error!.code !== 403) {
-      setErrorMessage(ErrorResponseToMessageMap.DEFAULT)
-      setRedirect({ to: "/", label: "retour à la page d'accueil" })
-      return
-    }
-
     const errorMessage =
       error?.message as keyof typeof ErrorResponseToMessageMap
 
     switch (errorMessage) {
       case "INVALID_TOKEN":
-        setRedirect({ to: "/connexion", label: "connexion" })
+        setRedirect({ to: "/connexion", label: "Connexion" })
 
         setTimeout(() => {
           removeToken()
@@ -39,10 +33,10 @@ export const ErrorBanner = () => {
         }, 5000)
         break
       case "CLOSED_GAME":
-        setRedirect({ to: "/resultats", label: "voir les résultats" })
+        setRedirect({ to: "/resultats", label: "Voir les résultats" })
         break
       default:
-        setRedirect({ to: "/", label: "retour à la page d'accueil" })
+        setRedirect({ to: "/", label: "Retourner à la page d'accueil" })
     }
 
     setErrorMessage(
@@ -52,7 +46,7 @@ export const ErrorBanner = () => {
   }
 
   return (
-    <p className=" mt-4 py-6 text-center bg-red-200 rounded-lg font-semibold z-20">
+    <p className=" mt-4 py-6 text-center text-gray-600 bg-red-100 border-red-300 border-y-2 font-semibold z-20">
       {errorMessage}
       <Link to={redirect.to}>
         <span className="underline text-pink-400 p-2">{redirect.label}</span>

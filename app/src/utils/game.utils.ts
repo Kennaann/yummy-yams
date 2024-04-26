@@ -31,17 +31,10 @@ export const DICES_DOTS_MAP = [
   ],
 ]
 
-export const shuffle = (array: number[]): number[] => {
-  let currentIndex = array.length
-
-  while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-    ;[array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ]
-  }
-
-  return array
-}
+export const ErrorResponseToMessageMap = {
+  INVALID_TOKEN: "Votre session a expiré, vous allez être redirigé.",
+  CLOSED_GAME: "La partie est terminée, vous ne pouvez plus jouer.",
+  NO_ATTEMPS_LEFT: "Vous n'avez plus de tentatives.",
+  NO_PASTRIES_LEFT: "Il n'y a plus de pâtisseries à gagner.",
+  DEFAULT: "Une erreur interne est survenue.",
+} as const

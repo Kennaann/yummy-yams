@@ -66,7 +66,7 @@ class YamsController {
 
       return {
         code: 500,
-        message: "No pastries left in stock",
+        message: "NO_PASTRIES_LEFT",
       };
     }
 
