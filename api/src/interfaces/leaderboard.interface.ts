@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IPastryModel } from "./pastries.interface";
+import { IPastry } from "./pastries.interface";
 import { IUser } from "./user.interface";
 import { ApiResponseDTO } from "./utils.interface";
 
@@ -12,8 +12,8 @@ export interface ILeaderBoardModel {
 }
 
 export interface ILeaderBoardWin {
-  winner: Partial<IUser>;
-  prize: Partial<IPastryModel>[];
+  winner: Pick<IUser, "username" | "email">;
+  prize: IPastry[];
   createdAt?: Date;
 }
 

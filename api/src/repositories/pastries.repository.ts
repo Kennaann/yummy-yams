@@ -6,14 +6,7 @@ class PastriesRepository {
   public static async getAllPastries(): Promise<RepositoryResponse<IPastry[]>> {
     const response = await PastryModel.find().exec();
 
-    const pastries: IPastry[] = response.map((pastry) => {
-      const { _id, name, image } = pastry.toObject();
-      return {
-        id: _id,
-        name,
-        image,
-      };
-    });
+    const pastries: IPastry[] = response.map((pastry) => pastry.toObject());
 
     return {
       data: pastries,

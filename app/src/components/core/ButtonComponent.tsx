@@ -26,11 +26,17 @@ export const Button = ({
     }
   }, [type, disabled])
 
+  const onButtonClicked = () => {
+    if (disabled) return
+
+    onClick && onClick()
+  }
+
   return (
     <Link to={href}>
       <button
         className={`font-semibold text-slate-50 ${color} py-2 px-4 rounded-tr-lg rounded-bl-lg rounded-br-lg mt-6 sm:w-fit`}
-        onClick={onClick}
+        onClick={onButtonClicked}
       >
         {label}
       </button>

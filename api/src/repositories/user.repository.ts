@@ -12,7 +12,7 @@ class UserRepository {
     data: IRegisterUserDTO
   ): Promise<RepositoryResponse<IUser>> {
     try {
-      const user: Partial<IUser> = {
+      const user = {
         email: data.email,
         password: data.password,
         username: `${data.firstname} ${data.lastname}`,

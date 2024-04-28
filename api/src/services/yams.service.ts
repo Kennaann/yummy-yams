@@ -11,7 +11,7 @@ class YamsService {
     for (let i = 0; i < dicesCount; i++) {
       const randomNumber = Math.floor(Math.random() * faces);
       combinations[randomNumber]++;
-      dices.push(randomNumber + 1);
+      dices.push(randomNumber);
     }
     const highestCombination = Math.max(...combinations);
 

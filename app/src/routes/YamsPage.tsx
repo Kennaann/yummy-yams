@@ -23,9 +23,14 @@ export const YamsPage = () => {
   }, [throwData, error])
 
   const getResults = async () => {
-    if (error) return
-
     await dispatch(getYamsResults())
+  }
+
+  const isButtonDisabled = () => {
+    if (error) return true
+    if (!throwData) return false
+
+    return throwData.attempts < 1
   }
 
   return (
@@ -48,7 +53,7 @@ export const YamsPage = () => {
             type="primary"
             label="Lancer"
             onClick={getResults}
-            disabled={!!error}
+            disabled={isButtonDisabled()}
           />
         )}
       </div>
