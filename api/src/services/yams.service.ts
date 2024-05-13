@@ -27,7 +27,7 @@ class YamsService {
   }
 
   private static isDouble(combinations: number[]): boolean {
-    return combinations.filter((num) => num === 2).length > 1;
+    return combinations.filter((num) => num >= 2).length > 1;
   }
 }
 

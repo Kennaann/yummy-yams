@@ -86,7 +86,7 @@ export const RegisterForm = () => {
         </p>
       </div>
 
-      <Button type="primary" label="S'inscrire'" onClick={onSubmit} />
+      <Button type="primary" label="S'inscrire" onClick={onSubmit} />
     </form>
   )
 }

@@ -12,7 +12,10 @@ class LeaderBoardRepository {
   ): Promise<void> {
     await LeaderBoardModel.findOneAndUpdate(
       {},
-      { $push: { wins: leaderboardEntry }, $set: { updatedAt: Date.now() } },
+      {
+        $push: { wins: { $each: [leaderboardEntry], $position: 0 } },
+        $set: { updatedAt: new Date() },
+      },
       { upsert: true }
     );
   }
@@ -33,7 +36,7 @@ class LeaderBoardRepository {
   ): Promise<void> {
     await LeaderBoardModel.findOneAndUpdate(
       { _id: id },
-      { ...data, updatedAt: Date.now() }
+      { ...data, updatedAt: new Date() }
     );
   }
 
