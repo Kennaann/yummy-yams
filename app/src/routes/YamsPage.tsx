@@ -26,13 +26,6 @@ export const YamsPage = () => {
     await dispatch(getYamsResults())
   }
 
-  const isButtonDisabled = () => {
-    if (error) return true
-    if (!throwData) return false
-
-    return throwData.attempts < 1
-  }
-
   return (
     <>
       <Logo />
@@ -48,12 +41,12 @@ export const YamsPage = () => {
           ))}
         </div>
 
-        {!throwData?.pastries && (
+        {(!throwData || !!throwData.attempts) && (
           <Button
             type="primary"
             label="Lancer"
             onClick={getResults}
-            disabled={isButtonDisabled()}
+            disabled={!!error}
           />
         )}
       </div>
