@@ -15,7 +15,7 @@ class AuthController {
     if (response.errors) {
       return {
         code: 400,
-        message: "Validation errors",
+        message: "VALIDATION_ERRORS",
         errors: response.errors,
       };
     }
@@ -44,7 +44,7 @@ class AuthController {
     if (!user) {
       return {
         code: 404,
-        message: "User not found",
+        message: "USER_NOT_FOUND",
       };
     }
 
@@ -55,7 +55,7 @@ class AuthController {
     if (!isValidPassword) {
       return {
         code: 400,
-        message: "Invalid password",
+        message: "INVALID_CREDENTIALS",
       };
     }
 

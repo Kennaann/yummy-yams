@@ -10,7 +10,7 @@ export interface IPastryModel {
 }
 
 export interface IPastry {
-  id: Types.ObjectId;
+  _id: Types.ObjectId;
   name: string;
   image: string;
 }

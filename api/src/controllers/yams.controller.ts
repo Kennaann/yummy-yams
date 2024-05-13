@@ -23,7 +23,7 @@ class YamsController {
     if (!isGameOpenResponse.data) {
       return {
         code: 403,
-        message: "Game is closed",
+        message: "CLOSED_GAME",
       };
     }
 
@@ -31,7 +31,7 @@ class YamsController {
     if (!userResponse.data || userResponse.data.attempts >= this.MAX_ATTEMPTS) {
       return {
         code: 403,
-        message: "No attempts left",
+        message: "NO_ATTEMPS_LEFT",
       };
     }
 
@@ -52,7 +52,7 @@ class YamsController {
         message: "OK",
         data: {
           result,
-          attempts: user.attempts + 1,
+          attempts: this.MAX_ATTEMPTS - (user.attempts + 1),
         },
       };
     }
@@ -66,7 +66,7 @@ class YamsController {
 
       return {
         code: 500,
-        message: "No pastries left in stock",
+        message: "NO_PASTRIES_LEFT",
       };
     }
 
@@ -81,7 +81,7 @@ class YamsController {
       data: {
         result,
         pastries,
-        attempts: this.MAX_ATTEMPTS,
+        attempts: 0,
       },
     };
   }

@@ -12,7 +12,7 @@ router.post("/register", async (req: Request, res: Response) => {
     req.body
   );
 
-  res.status(code).send(response.data);
+  res.status(code).send(response);
 });
 
 router.post("/login", async (req: Request, res: Response) => {

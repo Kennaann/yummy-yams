@@ -5,8 +5,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  if (token == null)
-    return res.status(403).send({ message: "No token provided" });
+  if (token == null) return res.status(403).send({ message: "INVALID_TOKEN" });
 
   jwt.verify(
     token,
@@ -14,7 +13,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
     (err: any, user: any) => {
       if (err) {
         console.error(err);
-        return res.status(403).send({ message: "Invalid token" });
+        return res.status(403).send({ message: "INVALID_TOKEN" });
       }
 
       req.body.user = user;

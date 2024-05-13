@@ -9,7 +9,7 @@ import PastriesRepository from "../repositories/pastries.repository";
 class PastriesService {
   public static getSerializedPastries(pastryModels: IPastryModel[]) {
     return pastryModels.map(({ _id, name, image }) => ({
-      id: _id,
+      _id,
       name,
       image,
     }));
