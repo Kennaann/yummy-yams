@@ -49,10 +49,10 @@ export const Result = () => {
         {prizeStatus.message}
       </h2>
 
-      {prizeStatus.prize && (
-        <div className="flex flex-col items-center mt-12">
+      <div className="flex flex-col items-center">
+        {prizeStatus.prize && (
           <div className="flex gap-3 md:gap-4 mb-2">
-            {prizeStatus.prize?.map(pastry => (
+            {prizeStatus.prize.map(pastry => (
               <img
                 key={pastry._id}
                 src={`assets/${pastry.image}`}
@@ -61,18 +61,18 @@ export const Result = () => {
               />
             ))}
           </div>
-          <Button
-            type="primary"
-            label="Réclamer"
-            onClick={() => console.log(prizeStatus.prize)}
-          />
-        </div>
-      )}
-      {!error && !prizeStatus.prize && prizeStatus.message && (
-        <p className="text-center mt-4">
-          {throwData?.attempts} essais restants
-        </p>
-      )}
+        )}
+
+        {!error && !prizeStatus.prize && prizeStatus.message && (
+          <p className="text-center mt-4">
+            {throwData!.attempts} essais restants
+          </p>
+        )}
+
+        {throwData!.attempts < 1 && (
+          <Button type="primary" label="Voir les résultats" href="/resultats" />
+        )}
+      </div>
     </div>
   )
 }
