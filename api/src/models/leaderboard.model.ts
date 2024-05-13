@@ -21,17 +21,17 @@ export const LeaderBoardSchema = new Schema({
       ],
       createdAt: {
         type: Date,
-        default: Date.now(),
+        default: new Date(),
       },
     },
   ],
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: new Date(),
   },
   updatedAt: {
     type: Date,
-    default: Date.now(),
+    default: new Date(),
   },
 });
 

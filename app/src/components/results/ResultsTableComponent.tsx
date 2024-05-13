@@ -29,7 +29,7 @@ export const ResultsTable = () => {
   }
 
   return (
-    <div className="overflow-hidden rounded-lg mt-4">
+    <div className="overflow-hidden rounded-lg mt-4 md:mt-8">
       <table className="w-full text-sm text-left rtl:text-right text-gray-600">
         <thead className="text-xs text-white uppercase bg-slate-400">
           <tr>

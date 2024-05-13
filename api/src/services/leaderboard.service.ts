@@ -8,6 +8,7 @@ class LeaderBoardService {
     const leaderboardEntry: ILeaderBoardWin = {
       winner: user,
       prize: pastries,
+      createdAt: new Date(),
     };
 
     return await LeaderBoardRepository.addEntry(leaderboardEntry);

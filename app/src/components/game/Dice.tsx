@@ -14,7 +14,7 @@ export const Dice = ({ numberIndex }: DiceProps) => {
               return (
                 <div
                   key={index}
-                  className={`w-2 h-2 bg-${dot ? "gray-700" : "white"} rounded-full`}
+                  className={`w-2 h-2 bg-${dot ? "black" : "white"} rounded-full`}
                 ></div>
               )
             })}
